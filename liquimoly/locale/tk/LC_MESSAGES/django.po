@@ -1,0 +1,872 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-31 16:33+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: cart/admin.py:143 cart/admin.py:253
+msgid "Preview"
+msgstr "Öňünden görmek"
+
+#: cart/admin.py:196 cart/models.py:206
+msgid "Price"
+msgstr "Baha"
+
+#: cart/admin.py:197
+msgid "Stock Quantity"
+msgstr "Ammardaky sany"
+
+#: cart/models.py:9
+msgid "Title Tm"
+msgstr "Ady (Türkmençe)"
+
+#: cart/models.py:10
+msgid "Title Ru"
+msgstr "Ady (Rusça)"
+
+#: cart/models.py:17 cart/models.py:22 cart/models.py:81 cart/models.py:180
+#: cart/models.py:423
+msgid "Place"
+msgstr "Ýer"
+
+#: cart/models.py:18
+msgid "Places"
+msgstr "Ýerler"
+
+#: cart/models.py:23
+msgid "title_tm"
+msgstr "Ady (Türkmençe)"
+
+#: cart/models.py:24
+msgid "title_ru"
+msgstr "Ady (Rusça)"
+
+#: cart/models.py:25 cart/models.py:112 cart/models.py:212
+msgid "Image"
+msgstr "Surat"
+
+#: cart/models.py:26
+msgid "Description Tm"
+msgstr "Düşündiriş (Türkmençe)"
+
+#: cart/models.py:27
+msgid "Description Ru"
+msgstr "Düşündiriş (Rusça)"
+
+#: cart/models.py:34
+msgid "Banner"
+msgstr "Banner"
+
+#: cart/models.py:35
+msgid "Banners"
+msgstr "Bannerler"
+
+#: cart/models.py:83
+msgid "Parent"
+msgstr "Esasy"
+
+#: cart/models.py:84
+msgid "type"
+msgstr "Görnüşi"
+
+#: cart/models.py:90 cart/models.py:347 cart/models.py:504
+msgid "Brand"
+msgstr "Brend"
+
+#: cart/models.py:91
+msgid "Brands"
+msgstr "Brendler"
+
+#: cart/models.py:98 cart/models.py:192
+msgid "Title TM"
+msgstr "Ady (Türkmençe)"
+
+#: cart/models.py:105 cart/models.py:199
+msgid "Title RU"
+msgstr "Ady (Rusça)"
+
+#: cart/models.py:121
+msgid "Parent Category"
+msgstr "Esasy kategoriýa"
+
+#: cart/models.py:126 cart/models.py:233 cart/models.py:396 cart/models.py:454
+msgid "Created At"
+msgstr "Döredilen senesi"
+
+#: cart/models.py:130 cart/models.py:187
+msgid "Category"
+msgstr "Kategoriýa"
+
+#: cart/models.py:131
+msgid "Categories"
+msgstr "Kategoriýalar"
+
+#: cart/models.py:218
+msgid "Description"
+msgstr "Düşündiriş"
+
+#: cart/models.py:223 cart/models.py:342 cart/models.py:499
+msgid "Quantity"
+msgstr "Sany"
+
+#: cart/models.py:228 cart/models.py:459
+msgid "Updated At"
+msgstr "Täzelenen senesi"
+
+#: cart/models.py:237 cart/models.py:282 cart/models.py:323 cart/models.py:483
+msgid "Product"
+msgstr "Haryt"
+
+#: cart/models.py:238
+msgid "Products"
+msgstr "Harytlar"
+
+#: cart/models.py:287
+msgid "Key TM"
+msgstr "Häsiýeti (Türkmençe)"
+
+#: cart/models.py:294
+msgid "Key RU"
+msgstr "Häsiýeti (Rusça)"
+
+#: cart/models.py:299
+msgid "Value TM"
+msgstr "Ýagdaýy (Türkmençe)"
+
+#: cart/models.py:306
+msgid "Value RU"
+msgstr "Ýagdaýy (Rusça)"
+
+#: cart/models.py:310
+msgid "Specification"
+msgstr "Häsiýet"
+
+#: cart/models.py:311
+msgid "Specifications"
+msgstr "Häsiýetler"
+
+#: cart/models.py:332 cart/models.py:432
+msgid "User"
+msgstr "Ulanyjy"
+
+#: cart/models.py:337
+msgid "Device ID"
+msgstr "Enjam ID-si"
+
+#: cart/models.py:354 cart/models.py:511
+msgid "Model"
+msgstr "Model"
+
+#: cart/models.py:361 cart/models.py:518
+msgid "Year"
+msgstr "Ýyly"
+
+#: cart/models.py:368 cart/models.py:525
+msgid "Engine"
+msgstr "Motor"
+
+#: cart/models.py:375 cart/models.py:532
+msgid "Casting Type"
+msgstr "Kanister görnüşi"
+
+#: cart/models.py:382 cart/models.py:539
+msgid "Car Number Type"
+msgstr "Awtoulag belgisiniň görnüşi"
+
+#: cart/models.py:389 cart/models.py:546
+msgid "Car Number"
+msgstr "Awtoulag belgisi"
+
+#: cart/models.py:400
+msgid "Cart Item"
+msgstr "Sebetdäki haryt"
+
+#: cart/models.py:401
+msgid "Cart Items"
+msgstr "Sebetdäki harytlar"
+
+#: cart/models.py:413
+msgid "pending"
+msgstr "Garaşylýar"
+
+#: cart/models.py:414
+msgid "success"
+msgstr "Tassyklanyldy"
+
+#: cart/models.py:415
+msgid "reject"
+msgstr "Ret edildi"
+
+#: cart/models.py:438
+msgid "Status"
+msgstr "Ýagdaýy"
+
+#: cart/models.py:442
+msgid "Address"
+msgstr "Salgysy"
+
+#: cart/models.py:449
+msgid "Total Price"
+msgstr "Jemi baha"
+
+#: cart/models.py:463 cart/models.py:476
+msgid "Order"
+msgstr "Sargyt"
+
+#: cart/models.py:464
+msgid "Orders"
+msgstr "Sargytlar"
+
+#: cart/models.py:488
+msgid "Product Title"
+msgstr "Harydyň ady"
+
+#: cart/models.py:494
+msgid "Product Price"
+msgstr "Harydyň bahasy"
+
+#: cart/models.py:557
+msgid "Order Item"
+msgstr "Sargyt harydy"
+
+#: cart/models.py:558
+msgid "Order Items"
+msgstr "Sargyt harytlary"
+
+#: cart/templates/cart/about_company.html:71
+msgid "Kompaniýa Hakkynda"
+msgstr "Kompaniýa hakynda"
+
+#: cart/templates/cart/about_company.html:75
+msgid "Türkmenistanynda ynamy almak we saglam hyzmat"
+msgstr "Türkmenistanda ynam we ýokary hilli hyzmat"
+
+#: cart/templates/cart/about_company.html:86
+msgid ""
+"\n"
+"            Biz awtoulag ýaglary, almanyň bölejekleri,\n"
+"            batareýalar we awtoulag aksesuarlarynyň üpjün etmeginde hünär "
+"bilen işleýäris.\n"
+"\n"
+"            Biziň maksadymyz müşderilere ýokary hilli önümleri,\n"
+"            we professional hyzmatyny bermekdir.\n"
+"            "
+msgstr ""
+"\n"
+"            Biz awtoulag ýaglaryny, ätiýaçlyk şaýlaryny,\n"
+"            batareýalary we awtoulag esbaplaryny hödürlemekde hünärmenlik bilen işleýäris.\n"
+"\n"
+"            Biziň maksadymyz müşderilerimize ýokary hilli önümleri\n"
+"            hem-de professional hyzmaty hödürlemekdir.\n"
+"            "
+
+#: cart/templates/cart/about_company.html:101
+msgid "Biziň ýerlerimiz"
+msgstr "Şahamçalarymyz"
+
+#: cart/templates/cart/about_company.html:112
+msgid "Ashgabat"
+msgstr "Aşgabat"
+
+#: cart/templates/cart/about_company.html:117
+msgid "Baş ofiş"
+msgstr "Baş ofis"
+
+#: cart/templates/cart/about_company.html:131
+msgid "Aşgabat şäheri Täjir (Proyezd Dosaaf) köçesi jaý 1/1"
+msgstr "Aşgabat ş., Täjir (DOSAAF geçelgesi) köçesi, jaý 1/1"
+
+#: cart/templates/cart/about_company.html:144
+#: cart/templates/cart/about_company.html:171
+msgid "Balkan"
+msgstr "Balkan"
+
+#: cart/templates/cart/about_company.html:158
+msgid "Türkmenbaşy şäheri"
+msgstr "Türkmenbaşy şäheri"
+
+#: cart/templates/cart/about_company.html:185
+msgid "Balkanabat şäheri"
+msgstr "Balkanabat şäheri"
+
+#: cart/templates/cart/about_company.html:198
+msgid "Mary"
+msgstr "Mary"
+
+#: cart/templates/cart/about_company.html:212
+msgid "Mary şäher, Daşoguz (Griboýedow) köçe"
+msgstr "Mary şäheri, Daşoguz (Griboýedow) köçesi"
+
+#: cart/templates/cart/about_company.html:225
+msgid "Lebap"
+msgstr "Lebap"
+
+#: cart/templates/cart/about_company.html:239
+msgid "Lebap welaýaty Türkmenabat ş. Niýazow şaýoly 113-nji jaýy"
+msgstr "Lebap welaýaty, Türkmenabat şäheri, Nyýazow şaýoly, 113-nji jaý"
+
+#: cart/templates/cart/about_company.html:252
+msgid "Dashoguz"
+msgstr "Daşoguz"
+
+#: cart/templates/cart/about_company.html:266
+msgid "Dashoguz welaýat"
+msgstr "Daşoguz welaýaty"
+
+#: cart/templates/cart/cart.html:5
+msgid "Cart"
+msgstr "Sebet"
+
+#: cart/templates/cart/cart.html:151
+msgid "Ulgamyň içine girmek talap edilýar"
+msgstr "Ulgama girmek talap edilýär"
+
+#: cart/templates/cart/cart.html:155
+msgid "Sargyty ýerine ýetirmek üçin, hasap açyň."
+msgstr "Sargyt etmek üçin hasabyňyza giriň."
+
+#: cart/templates/cart/cart.html:165
+msgid "Girmek"
+msgstr "Girmek"
+
+#: cart/templates/cart/cart.html:190
+msgid "Hyzmaty ýerine ýetirmek"
+msgstr "Sargyty resmileşdirmek"
+
+#: cart/templates/cart/cart.html:208
+msgid "Hyzmaty saýlap kabul edeniňizden soň siz bilen habarlaşylar"
+msgstr "Sargydyňyz kabul edilenden soň, biz siziň bilen habarlaşarys."
+
+#: cart/templates/cart/cart.html:211
+msgid "Maşynyň brendine görä baha ýagdaýlary üýtgemegi mümkin"
+msgstr "Bahalar awtoulagyň brendine görä üýtgäp biler."
+
+#: cart/templates/cart/cart.html:226 cart/templates/cart/cart.html:417
+#: cart/templates/cart/orders.html:157
+#: cart/templates/cart/product_list.html:186
+msgid "Jemi"
+msgstr "Jemi"
+
+#: cart/templates/cart/cart.html:238 cart/templates/cart/cart.html:419
+msgid "TMT"
+msgstr "TMT"
+
+#: cart/templates/cart/cart.html:255
+msgid "yza"
+msgstr "Yza"
+
+#: cart/templates/cart/cart.html:266
+msgid "Hyzmaty kabul et"
+msgstr "Hyzmaty kabul et"
+
+#: cart/templates/cart/cart.html:288
+msgid "Haryt"
+msgstr "Haryt"
+
+#: cart/templates/cart/cart.html:289
+msgid "Atlandyrylyşy"
+msgstr "Ady"
+
+#: cart/templates/cart/cart.html:290
+msgid "Ulag maglumaty"
+msgstr "Ulag maglumatlary"
+
+#: cart/templates/cart/cart.html:291
+msgid "Baha"
+msgstr "Baha"
+
+#: cart/templates/cart/cart.html:381
+msgid "Öçür"
+msgstr "Öçür"
+
+#: cart/templates/cart/cart.html:398
+msgid "Siziň sebediňiz boş"
+msgstr "Sebediňiz boş"
+
+#: cart/templates/cart/cart.html:399
+msgid "Siziň sebediňiz boş. Harydy goşmagyňyzy haýyş edýäris."
+msgstr "Sebediňiz boş. Sebede haryt goşmagyňyzy haýyş edýäris."
+
+#: cart/templates/cart/cart.html:401
+msgid "Dowam etmek"
+msgstr "Dowam et"
+
+#: cart/templates/cart/cart.html:412
+msgid "Umumy Sany"
+msgstr "Umumy sany"
+
+#: cart/templates/cart/cart.html:432 cart/templates/cart/cart.html:444
+msgid "Hyzmaty sargyt etmek"
+msgstr "Hyzmaty sargyt etmek"
+
+#: cart/templates/cart/cart.html:452
+msgid "Söwda dowam etmek"
+msgstr "Söwda dowam etmek"
+
+#: cart/templates/cart/categories.html:16
+#: cart/templates/cart/footer.html:34
+msgid "Kategoriýalar"
+msgstr "Kategoriýalar"
+
+#: cart/templates/cart/category_detail.html:14
+#: cart/templates/cart/index.html:15
+#: cart/templates/cart/product_detail.html:15
+#: cart/templates/cart/product_list.html:15
+#: cart/templates/cart/search.html:20
+msgid "Hyzmat goş"
+msgstr "Sebede goş"
+
+#: cart/templates/cart/category_detail.html:30
+#: cart/templates/cart/index.html:31
+#: cart/templates/cart/product_detail.html:31
+#: cart/templates/cart/product_list.html:31
+#: cart/templates/cart/search.html:36
+msgid "Brendi saýlaň"
+msgstr "Markany saýlaň"
+
+#: cart/templates/cart/category_detail.html:36
+#: cart/templates/cart/index.html:37
+#: cart/templates/cart/product_detail.html:37
+#: cart/templates/cart/product_list.html:37
+#: cart/templates/cart/search.html:42
+msgid "-- Brendi saýlaň --"
+msgstr "-- Markany saýlaň --"
+
+#: cart/templates/cart/category_detail.html:53
+#: cart/templates/cart/index.html:54
+#: cart/templates/cart/product_detail.html:54
+#: cart/templates/cart/product_list.html:54
+#: cart/templates/cart/search.html:59
+msgid "Modeli saýlaň"
+msgstr "Modeli saýlaň"
+
+#: cart/templates/cart/category_detail.html:59
+#: cart/templates/cart/category_detail.html:435
+#: cart/templates/cart/category_detail.html:614
+#: cart/templates/cart/index.html:60
+#: cart/templates/cart/index.html:526
+#: cart/templates/cart/index.html:705
+#: cart/templates/cart/product_detail.html:60
+#: cart/templates/cart/product_detail.html:360
+#: cart/templates/cart/product_detail.html:539
+#: cart/templates/cart/product_list.html:60
+#: cart/templates/cart/product_list.html:452
+#: cart/templates/cart/product_list.html:631
+#: cart/templates/cart/search.html:65
+#: cart/templates/cart/search.html:507
+#: cart/templates/cart/search.html:686
+msgid "-- Modeli saýlaň --"
+msgstr "-- Modeli saýlaň --"
+
+#: cart/templates/cart/category_detail.html:66
+#: cart/templates/cart/index.html:67
+#: cart/templates/cart/product_detail.html:67
+#: cart/templates/cart/product_list.html:67
+#: cart/templates/cart/search.html:72
+msgid "Ýyly saýlaň"
+msgstr "Ýyly saýlaň"
+
+#: cart/templates/cart/category_detail.html:72
+#: cart/templates/cart/index.html:73
+#: cart/templates/cart/product_detail.html:73
+#: cart/templates/cart/product_list.html:73
+#: cart/templates/cart/search.html:78
+msgid "-- Ýyly saýlaň --"
+msgstr "-- Ýyly saýlaň --"
+
+#: cart/templates/cart/category_detail.html:86
+#: cart/templates/cart/index.html:87
+#: cart/templates/cart/product_detail.html:87
+#: cart/templates/cart/product_list.html:87
+#: cart/templates/cart/search.html:92
+msgid "Matory saýlaň"
+msgstr "Motory saýlaň"
+
+#: cart/templates/cart/category_detail.html:92
+#: cart/templates/cart/index.html:93
+#: cart/templates/cart/product_detail.html:93
+#: cart/templates/cart/product_list.html:93
+#: cart/templates/cart/search.html:98
+msgid "-- Matory saýlaň --"
+msgstr "-- Motory saýlaň --"
+
+#: cart/templates/cart/category_detail.html:106
+#: cart/templates/cart/index.html:107
+#: cart/templates/cart/product_detail.html:107
+#: cart/templates/cart/product_list.html:107
+#: cart/templates/cart/search.html:112
+msgid "Guýma görnüşini saýlaň"
+msgstr "Guýma görnüşini saýlaň"
+
+#: cart/templates/cart/category_detail.html:112
+#: cart/templates/cart/index.html:113
+#: cart/templates/cart/product_detail.html:113
+#: cart/templates/cart/product_list.html:113
+#: cart/templates/cart/search.html:118
+msgid "-- Guýma görnüşini saýlaň --"
+msgstr "-- Guýma görnüşini saýlaň --"
+
+#: cart/templates/cart/category_detail.html:126
+#: cart/templates/cart/index.html:127
+#: cart/templates/cart/product_detail.html:127
+#: cart/templates/cart/product_list.html:127
+#: cart/templates/cart/search.html:132
+msgid "Maşyn nomer görnüşi saýlaň"
+msgstr "Awtoulag belgisiniň görnüşini saýlaň"
+
+#: cart/templates/cart/category_detail.html:131
+#: cart/templates/cart/index.html:132
+#: cart/templates/cart/product_detail.html:132
+#: cart/templates/cart/product_list.html:132
+#: cart/templates/cart/search.html:137
+msgid "-- Maşyn nomer görnüşi --"
+msgstr "-- Awtoulag belgisiniň görnüşi --"
+
+#: cart/templates/cart/category_detail.html:146
+#: cart/templates/cart/index.html:147
+#: cart/templates/cart/product_detail.html:147
+#: cart/templates/cart/product_list.html:147
+#: cart/templates/cart/search.html:152
+msgid "Maşynyň nomeri"
+msgstr "Awtoulag belgisi"
+
+#: cart/templates/cart/category_detail.html:161
+#: cart/templates/cart/category_detail.html:235
+#: cart/templates/cart/index.html:162
+#: cart/templates/cart/index.html:315
+#: cart/templates/cart/product_detail.html:162
+#: cart/templates/cart/product_detail.html:195
+#: cart/templates/cart/product_list.html:162
+#: cart/templates/cart/product_list.html:230
+#: cart/templates/cart/search.html:167
+#: cart/templates/cart/search.html:263
+msgid "Sebede goş"
+msgstr "Sebede goş"
+
+#: cart/templates/cart/category_detail.html:196
+#: cart/templates/cart/index.html:281
+#: cart/templates/cart/product_list.html:199
+#: cart/templates/cart/search.html:229
+msgid "Elýeterli"
+msgstr "Elýeterli"
+
+#: cart/templates/cart/category_detail.html:200
+#: cart/templates/cart/index.html:285
+#: cart/templates/cart/product_list.html:203
+#: cart/templates/cart/search.html:233
+msgid "Elýeterli däl"
+msgstr "Elýeterli däl"
+
+#: cart/templates/cart/category_detail.html:255
+#: cart/templates/cart/category_detail.html:260
+#: cart/templates/cart/product_list.html:250
+#: cart/templates/cart/product_list.html:255
+#: cart/templates/cart/search.html:283
+#: cart/templates/cart/search.html:288
+msgid "Öňki"
+msgstr "Öňki"
+
+#: cart/templates/cart/category_detail.html:283
+#: cart/templates/cart/category_detail.html:288
+#: cart/templates/cart/product_list.html:278
+#: cart/templates/cart/product_list.html:283
+#: cart/templates/cart/search.html:311
+#: cart/templates/cart/search.html:316
+msgid "indiki"
+msgstr "Indiki"
+
+#: cart/templates/cart/category_detail.html:582
+#: cart/templates/cart/category_detail.html:626
+#: cart/templates/cart/index.html:673
+#: cart/templates/cart/index.html:717
+#: cart/templates/cart/product_detail.html:507
+#: cart/templates/cart/product_detail.html:551
+#: cart/templates/cart/product_list.html:599
+#: cart/templates/cart/product_list.html:643
+#: cart/templates/cart/search.html:654
+#: cart/templates/cart/search.html:698
+msgid "Goşuldy"
+msgstr "Goşuldy"
+
+#: cart/templates/cart/footer.html:17
+msgid ""
+"Liqui Moly. Awtoulaglar üçin ýokary hilli ýaglar we goşundylar bilen üpjün "
+"ediji. 1957-nji ýylda Germaniýada döredilen kompaniýa, häzirki wagtda "
+"dünýäniň 120-den gowrak ýurdunda öz önümlerini hödürleýär."
+msgstr ""
+"Liqui Moly — awtoulaglar üçin ýokary hilli ýaglary we goşundylary öndürýän "
+"kompaniýa. Ol 1957-nji ýylda Germaniýada döredildi we häzirki wagtda dünýäniň "
+"120-den gowrak ýurdunda öz önümlerini hödürleýär."
+
+#: cart/templates/cart/footer.html:23
+msgid "Nawigasiýa"
+msgstr "Nawigasiýa"
+
+#: cart/templates/cart/footer.html:26
+#: cart/templates/cart/navbar.html:309
+#: save.txt:311
+msgid "Baş sahypa"
+msgstr "Baş sahypa"
+
+#: cart/templates/cart/footer.html:27
+#: cart/templates/cart/navbar.html:315
+#: save.txt:317
+msgid "Kompaniýa hakkynda"
+msgstr "Kompaniýa hakynda"
+
+#: cart/templates/cart/footer.html:55
+msgid "Aragatnaşyk"
+msgstr "Aragatnaşyk"
+
+#: cart/templates/cart/footer.html:60
+msgid "Türkmenistan"
+msgstr "Türkmenistan"
+
+#: cart/templates/cart/footer.html:94
+msgid "© 2026 Liqui Moly. Hemme hukuklar goralan"
+msgstr "© 2026 Liqui Moly. Ähli hukuklar goralýar."
+
+#: cart/templates/cart/footer.html:98
+msgid "Ýokary hilli awtoulag hyzmaty üçin iň gowy önümler"
+msgstr "Awtoulagyňyz üçin iň ýokary hilli önümler"
+
+#: cart/templates/cart/index.html:257
+msgid "Meşhur harytlar"
+msgstr "Meşhur harytlar"
+
+#: cart/templates/cart/index.html:261
+msgid "Liqui Moly önümleri"
+msgstr "Liqui Moly önümleri"
+
+#: cart/templates/cart/index.html:267
+msgid "Hemme harytlar"
+msgstr "Ähli harytlar"
+
+#: cart/templates/cart/index.html:347
+msgid "Giň önüm görnüşi"
+msgstr "Giň önüm görnüşi"
+
+#: cart/templates/cart/index.html:350
+msgid "Dürli ulaglar üçin giň saýlaw."
+msgstr "Dürli awtoulaglar üçin giň saýlaw."
+
+#: cart/templates/cart/index.html:363
+#, python-format
+msgid "100%% Asyl önüm"
+msgstr "100%% Asyl önüm"
+
+#: cart/templates/cart/index.html:366
+msgid "Diňe resmi we kepillikli önümler."
+msgstr "Diňe resmi we kepillikli önümler."
+
+#: cart/templates/cart/index.html:379
+msgid "Hünarmen maslahaty"
+msgstr "Hünärmen maslahaty"
+
+#: cart/templates/cart/index.html:382
+msgid "Ulagyňyz üçin laýyk önümi saýlamaga kömek ederis."
+msgstr "Ulagyňyz üçin iň laýyk önümi saýlamaga kömek ederis."
+
+#: cart/templates/cart/navbar.html:13 save.txt:13
+msgid "Siziň ýerleşýän ýerňiz"
+msgstr "Siziň ýerleşýän ýeriňiz"
+
+#: cart/templates/cart/navbar.html:41 cart/templates/cart/navbar.html:52
+#: save.txt:41 save.txt:52
+msgid "Çykmak"
+msgstr "Çykmak"
+
+#: cart/templates/cart/navbar.html:45 save.txt:45
+msgid "Siz hakykatyndan-da sistemäden çykmak isleýän sizimiň?"
+msgstr "Hakykatdan hem ulgamdan çykmak isleýärsiňizmi?"
+
+#: cart/templates/cart/navbar.html:86 save.txt:86
+msgid ""
+"Eger parolyňyzy ýatdan çykaran bolsaňyz, bize SMS iberiň. Goldaw toparymyz "
+"ony täzeden dikeltmäge kömek eder."
+msgstr ""
+"Eger parolyňyzy ýatdan çykaran bolsaňyz, bize SMS iberiň. Goldaw toparymyz "
+"ony täzeden dikeltmäge kömek eder."
+
+#: cart/templates/cart/navbar.html:90 save.txt:90
+msgid "Hyzmat belgisi"
+msgstr "Hyzmat belgisi"
+
+#: cart/templates/cart/navbar.html:102 save.txt:102
+msgid "SMS iber"
+msgstr "SMS iber"
+
+#: cart/templates/cart/navbar.html:118 save.txt:118
+msgid "Sistema girmek"
+msgstr "Ulgama girmek"
+
+#: cart/templates/cart/navbar.html:125 save.txt:125
+msgid "Doly ady"
+msgstr "Doly ady"
+
+#: cart/templates/cart/navbar.html:128 save.txt:128
+msgid "Telefon belgisi"
+msgstr "Telefon belgisi"
+
+#: cart/templates/cart/navbar.html:130 save.txt:130
+msgid "Parol"
+msgstr "Parol"
+
+#: cart/templates/cart/navbar.html:142 save.txt:142
+msgid "Meni ýatda sakla"
+msgstr "Meni ýatda sakla"
+
+#: cart/templates/cart/navbar.html:151 save.txt:151
+msgid "Parolymy yatdan çykardym?"
+msgstr "Parolymy ýatdan çykardym?"
+
+#: cart/templates/cart/navbar.html:158 save.txt:158
+msgid "Içeri girmek"
+msgstr "Içeri girmek"
+
+#: cart/templates/cart/navbar.html:321 cart/templates/cart/orders.html:153
+#: save.txt:323
+msgid "Meniň hyzmatlarym"
+msgstr "Meniň hyzmatlarym"
+
+#: cart/templates/cart/navbar.html:338 cart/templates/cart/navbar.html:472
+#: save.txt:340 save.txt:474
+msgid "Harytlary gözle..."
+msgstr "Harytlary gözle..."
+
+#: cart/templates/cart/orders.html:154
+msgid "Sargytlaryňyzyň meýilnamasy we statuslary"
+msgstr "Sargytlaryňyzyň meýilnamasy we statuslary"
+
+#: cart/templates/cart/orders.html:180
+msgid "Sargyt"
+msgstr "Sargyt"
+
+#: cart/templates/cart/orders.html:191
+msgid "Barlanýar"
+msgstr "Barlanylýar"
+
+#: cart/templates/cart/orders.html:195
+msgid "Tassyklandy"
+msgstr "Tassyklandy"
+
+#: cart/templates/cart/orders.html:199
+msgid "Ret edildi"
+msgstr "Ret edildi"
+
+#: cart/templates/cart/orders.html:203
+msgid "Işleniş prosesinde"
+msgstr "Işlenilýär"
+
+#: cart/templates/cart/orders.html:215
+msgid "Harytlar"
+msgstr "Harytlar"
+
+#: cart/templates/cart/orders.html:218 cart/templates/cart/search.html:213
+msgid "sany"
+msgstr "sany"
+
+#: cart/templates/cart/orders.html:226
+msgid "Jemi bahasy"
+msgstr "Jemi bahasy"
+
+#: cart/templates/cart/orders.html:237
+msgid "Harytlar sanawy"
+msgstr "Harytlaryň sanawy"
+
+#: cart/templates/cart/orders.html:333
+msgid "Haryt ýok"
+msgstr "Haryt ýok"
+
+#: cart/templates/cart/orders.html:355
+msgid "Sizde heniz sargyt ýok"
+msgstr "Sizde entek sargyt ýok"
+
+#: cart/templates/cart/orders.html:359
+msgid "Bu ýerde sargytlaryňyzyň taryhy görkeziler"
+msgstr "Bu ýerde siziň sargytlaryňyzyň taryhy görkeziler."
+
+#: cart/templates/cart/orders.html:364
+msgid "Hyzmatlary sargamak"
+msgstr "Sargyt et"
+
+#: cart/templates/cart/product_detail.html:181
+msgid "Kategoriýa:"
+msgstr "Kategoriýa:"
+
+#: cart/templates/cart/product_detail.html:203
+msgid "Häsiýeti"
+msgstr "Häsiýeti"
+
+#: cart/templates/cart/product_detail.html:204
+msgid "Ýagdaýy"
+msgstr "Ýagdaýy"
+
+#: cart/templates/cart/product_detail.html:216
+msgid "Häsiýetler ýok"
+msgstr "Häsiýetler ýok"
+
+#: cart/templates/cart/product_list.html:181
+msgid "Harytlar katalogy"
+msgstr "Harytlar katalogy"
+
+#: cart/templates/cart/product_list.html:182
+msgid "Elýeterli hemmesi harytlar"
+msgstr "Ähli elýeterli harytlar"
+
+#: cart/templates/cart/search.html:8
+msgid "Search"
+msgstr "Gözleg"
+
+#: cart/templates/cart/search.html:192
+msgid "Gözleg netijelary"
+msgstr "Gözleg netijeleri"
+
+#: cart/templates/cart/search.html:196
+msgid "Sorag boýunça:"
+msgstr "Gözleg boýunça:"
+
+#: cart/templates/cart/search.html:209
+msgid "Harytlar tapyldy"
+msgstr "Haryt tapyldy"
+
+#: cart/templates/cart/search.html:342
+msgid "Ничего не найдено"
+msgstr "Hiç zat tapylmady"
+
+#: cart/templates/cart/search.html:348
+msgid "По запросу"
+msgstr "Gözleg boýunça"
+
+#: cart/templates/cart/search.html:350
+msgid "товары не найдены."
+msgstr "haryt tapylmady."
+
+#: cart/templates/cart/search.html:359
+msgid "На главную"
+msgstr "Baş sahypa"
+
+#: liquimoly/settings.py:276
+msgid "Русский"
+msgstr "Rusça"
+
+#: liquimoly/settings.py:277
+msgid "English"
+msgstr "Iňlisçe"
+
+#: liquimoly/settings.py:278
+msgid "Türkmençe"
+msgstr "Türkmençe"

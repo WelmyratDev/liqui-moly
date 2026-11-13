@@ -1,0 +1,276 @@
+{% extends "cart/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<style>
+
+.about-section {
+    padding: 40px 0;
+}
+
+.about-card {
+    border: 1px solid #f1f1f1;
+    border-radius: 16px;
+    padding: 25px;
+    background: #fff;
+    height: 100%;
+}
+
+.region-card {
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: .2s;
+    background: #fff;
+}
+
+.region-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.05);
+}
+
+.region-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.feature-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.feature-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+</style>
+
+<div class="container about-section">
+
+    <!-- TITLE -->
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+            {% translate "Kompaniýa Hakkynda" %}
+        </h1>
+
+        <p class="text-muted">
+            {% translate "Türkmenistanynda ynamy almak we saglam hyzmat" %}
+        </p>
+
+    </div>
+
+    <!-- ABOUT -->
+
+    <div class="about-card mb-4 text-center">
+
+        <p class="text-muted mb-0">
+
+            {% blocktranslate %}
+            Biz awtoulag ýaglary, almanyň bölejekleri,
+            batareýalar we awtoulag aksesuarlarynyň üpjün etmeginde hünär bilen işleýäris.
+
+            Biziň maksadymyz müşderilere ýokary hilli önümleri,
+            we professional hyzmatyny bermekdir.
+            {% endblocktranslate %}
+
+        </p>
+
+    </div>
+
+    <!-- REGIONS -->
+
+    <h3 class="section-title">
+        {% translate "Biziň ýerlerimiz" %}
+    </h3>
+
+    <div class="row g-4 mb-4">
+
+        <!-- Ashgabat -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="region-card h-100">
+
+                <h5 class="fw-bold mb-3">
+                    {% translate "Ashgabat" %}
+                </h5>
+
+                <div class="small text-muted mb-2">
+                    <i class="bi bi-geo-alt"></i>
+                    {% translate "Baş ofiş" %}
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-telephone"></i>
+                    +993 61 23-23-44
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-envelope"></i>
+                    liquimoly@sanly.tm
+                </div>
+
+                <div class="text-muted">
+                    {% translate "Aşgabat şäheri Täjir (Proyezd Dosaaf) köçesi jaý 1/1" %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Balkan -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="region-card h-100">
+
+                <h5 class="fw-bold mb-3">
+                    {% translate "Balkan" %}
+                </h5>
+
+                <div class="mb-2">
+                    <i class="bi bi-telephone"></i>
+                    +993 65 84-66-83
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-envelope"></i>
+                    liquimolybalkan@gmail.com
+                </div>
+
+                <div class="text-muted">
+                    {% translate "Türkmenbaşy şäheri" %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Balkan 2 -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="region-card h-100">
+
+                <h5 class="fw-bold mb-3">
+                    {% translate "Balkan" %}
+                </h5>
+
+                <div class="mb-2">
+                    <i class="bi bi-telephone"></i>
+                    +993 65 54-41-00
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-envelope"></i>
+                    liquimolybalkan@gmail.com
+                </div>
+
+                <div class="text-muted">
+                    {% translate "Balkanabat şäheri" %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Mary -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="region-card h-100">
+
+                <h5 class="fw-bold mb-3">
+                    {% translate "Mary" %}
+                </h5>
+
+                <div class="mb-2">
+                    <i class="bi bi-telephone"></i>
+                    +993 65 54-39-00
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-envelope"></i>
+                    dave.taganov@gmail.com
+                </div>
+
+                <div class="text-muted">
+                    {% translate "Mary şäher, Daşoguz (Griboýedow) köçe" %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Lebap -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="region-card h-100">
+
+                <h5 class="fw-bold mb-3">
+                    {% translate "Lebap" %}
+                </h5>
+
+                <div class="mb-2">
+                    <i class="bi bi-telephone"></i>
+                    +993 63 36-67-77
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-envelope"></i>
+                    liquimolyturkmenistan@gmail.com
+                </div>
+
+                <div class="text-muted">
+                    {% translate "Lebap welaýaty Türkmenabat ş. Niýazow şaýoly 113-nji jaýy" %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Dashoguz -->
+        <div class="col-md-6 col-lg-4">
+
+            <div class="region-card h-100">
+
+                <h5 class="fw-bold mb-3">
+                    {% translate "Dashoguz" %}
+                </h5>
+
+                <div class="mb-2">
+                    <i class="bi bi-telephone"></i>
+                    +993 62 70-64-14
+                </div>
+
+                <div class="mb-2">
+                    <i class="bi bi-envelope"></i>
+                    liquimolydasoguz@gmail.com
+                </div>
+
+                <div class="text-muted">
+                    {% translate "Dashoguz welaýat" %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

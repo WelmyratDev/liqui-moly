@@ -1,0 +1,309 @@
+{% load template_tags %}
+<div class="mb-3 d-block d-lg-none">
+    <div class="fs-4 my-2 text-center fw-semibold">Otzywlar</div>
+    <div class="pt-3 border bg-white">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-5 col-md-12 text-center px-3">
+                <div class="fs-1 fw-bold text-danger">{% get_ratings 'avg' %}</div>
+                <div class="d-flex align-items-center justify-content-center text-warning">
+                    <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                    </div>
+                    <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                    </div>
+                    <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                    </div>
+                    <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                    </div>
+                    <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+                <div class="text-secondary" style="font-size:.8rem;">({% get_ratings 'count' %})</div>
+            </div>
+            <div class="col-lg-auto d-none d-lg-block">
+                <div class="d-flex justify-content-center" style="height: 85px">
+                    <div class="vr"></div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="RatingModal_sm" tabindex="-1" aria-labelledby="RatingModalLabel_sm"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="RatingModalLabel_sm">Otzyw goşmak</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{% url 'cart:add-review' %}" class="text-center" method="POST">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="rating d-flex align-items-center justify-content-center">
+                                    <button id="r-star-1-sm" type="button" class="btn btn-link btn-sm text-warning"><i
+                                            class="h4 bi bi-star"></i></button>
+                                    <button id="r-star-2-sm" type="button" class="btn btn-link btn-sm text-warning"><i
+                                            class="h4 bi bi-star"></i></button>
+                                    <button id="r-star-3-sm" type="button" class="btn btn-link btn-sm text-warning"><i
+                                            class="h4 bi bi-star"></i></button>
+                                    <button id="r-star-4-sm" type="button" class="btn btn-link btn-sm text-warning"><i
+                                            class="h4 bi bi-star"></i></button>
+                                    <button id="r-star-5-sm" type="button" class="btn btn-link btn-sm text-warning"><i
+                                            class="h4 bi bi-star"></i></button>
+                                    <input class='form-control d-none' id="r_rating-sm" type="number" name="r_rating-sm"
+                                        value="0" min="1" max="5">
+                                </div>
+                                <div class="small text-secondary">Baha 1-den 5 ýyldyza çenli bolmalydyr.</div>
+                                <div class="form-group mt-3">
+                                    <textarea class="form-control rounded-0" required id="r_comment-sm"
+                                        name='r_comment-sm' rows="5" maxlength="1000" placeholder="Teswir..."></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger fw-semibold w-100 d-block" style="background-color: #bd3a3a;"><i
+                                        class="bi bi-caret-right-fill"></i>Ugratmak</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" id="DidNotLogin_sm">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Otzyw goşmak</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert mb-0 fw-semibold alert-warning" role='alert'>
+                                Ulgama girmedik ýagdaýynda otzyw goşup bolmaýar. Bize agza boluň we täzeden barlap görüň.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="loginFeedback_sm" type="button" class="btn btn-danger w-100 fw-semibold"
+                                style="border-radius: 3px; background-color: #bd3a3a;"><i class="bi bi-caret-right-fill"></i>Ulgama girmek</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-12 text-center">
+                {% if user.is_authenticated %}
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                    data-bs-target="#RatingModal_sm">Otzyw goşmak</button>
+                {% else %}
+                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#DidNotLogin_sm">Otzyw goşmak</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="py-2">
+            <div class="border-top px-2">
+                {% get_ratings as ratings %}
+                {% for rating in ratings %}
+                {% if forloop.first %}
+                <div class="d-flex mt-3 px-2 align-items-center">
+                    <div class="d-flex align-items-center text-warning">
+                        {% if rating.star == 1 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% elif rating.star == 2 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% elif rating.star == 3 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% elif rating.star == 4 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% else %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="date-time small text-muted px-4">
+                        {{ rating.created_at|date:"d.m.Y" }}
+                    </div>
+                </div>
+                <div class="d-flex px-2 align-items-center">
+                    <div class="text-secondary"><i class="bi bi-person-circle"></i></div>
+                    <div class="fw-semibold px-2" style="font-size:.9rem">{{ rating.user.name }}</div>
+                </div>
+                <div class="text-wrap mt-1 px-2" style="font-size:.8rem;">
+                    {{ rating.description }}
+                </div>
+                {% else %}
+                <div class="d-flex border-top mt-3 pt-2 px-2 align-items-center">
+                    <div class="d-flex align-items-center text-warning">
+                        {% if rating.star == 1 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% elif rating.star == 2 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% elif rating.star == 3 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% elif rating.star == 4 %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star"></i>
+                        </div>
+                        {% else %}
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        <div style="font-size:.8rem; margin-left:1px; margin-right: 1px"><i class="bi bi-star-fill"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="date-time small text-muted px-4">
+                        {{ rating.created_at|date:"d.m.Y" }}
+                    </div>
+                </div>
+                <div class="d-flex px-2 align-items-center">
+                    <div class="text-secondary"><i class="bi bi-person-circle"></i></div>
+                    <div class="fw-semibold px-2" style="font-size:.9rem">{{ rating.user.name }}</div>
+                </div>
+                <div class="text-wrap mt-1 px-2" style="font-size:.8rem;">
+                    {{ rating.description }}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="mt-1 border-top pt-3 px-2">
+                    <a href="{% url 'cart:reviews' %}" class="btn rounded btn-danger mt-3 btn-sm w-100" style="background-color: #bd3a3a;">Hemmesi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const loginFeedbackBtn = document.getElementById("loginFeedback_sm");
+
+        if (loginFeedbackBtn) {
+            loginFeedbackBtn.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const currentModalEl = this.closest("#DidNotLogin_sm");
+                if (currentModalEl) {
+                    const currentModal = bootstrap.Modal.getInstance(currentModalEl);
+                    if (currentModal) {
+                        currentModal.hide();
+                    }
+                }
+                const loginModalEl = document.getElementById("LoginModal");
+                if (loginModalEl) {
+                    const loginModal = bootstrap.Modal.getInstance(loginModalEl) || new bootstrap.Modal(loginModalEl);
+                    loginModal.show();
+                }
+            });
+        }
+        const ratingInput = document.getElementById("r_rating-sm");
+        let currentRating = 0;
+        const stars = [];
+
+        for (let i = 1; i <= 5; i++) {
+            const star = document.getElementById(`r-star-${i}-sm`);
+            if (star) stars.push(star);
+        }
+
+        function rate(value, save = true) {
+            if (save) {
+                currentRating = value;
+                if (ratingInput) ratingInput.value = currentRating;
+            }
+
+            stars.forEach((star, index) => {
+                const icon = star.firstElementChild;
+                if (icon) {
+                    if (index < value) {
+                        icon.classList.add("bi-star-fill");
+                        icon.classList.remove("bi-star");
+                    } else {
+                        icon.classList.add("bi-star");
+                        icon.classList.remove("bi-star-fill");
+                    }
+                }
+            });
+        }
+
+        stars.forEach((star, index) => {
+            const starValue = index + 1;
+
+            star.addEventListener("mouseenter", () => rate(starValue, false));
+            star.addEventListener("mouseleave", () => rate(currentRating, true));
+            star.addEventListener("click", () => rate(starValue, true));
+        });
+    });
+</script>

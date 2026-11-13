@@ -1,0 +1,572 @@
+{% load static template_tags i18n %}
+{% if not has_place %}
+<div class="modal fade"
+     id="placeModal"
+     data-bs-backdrop="static"
+     data-bs-keyboard="false">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {% translate "Siziň ýerleşýän ýerňiz" %}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                {% places as places %}
+                
+                {% for place in places %}
+                    <button
+                        class="btn btn-outline-dark w-100 mb-2 place-btn"
+                        data-id="{{ place.id }}">
+
+                        {{ place.title_tm }}
+                    </button>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endif %}
+<!-- LogoutModal -->
+<div class="modal fade" id="LogoutModal" tabindex="-1" aria-labelledby="LogoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="LogoutModalLabel">{% translate "Çykmak" %}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% translate "Siz hakykatyndan-da sistemäden çykmak isleýän sizimiň?" %}
+      </div>
+      <div class="modal-footer">
+        <form class="w-100" action="{% url 'users:logout' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="btn w-100 p-1 my-1 btn-primary">
+                <i class="bi bi-door-open"></i> {% translate "Çykmak" %}
+            </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade"
+    id="ForgotPasswordModal"
+    tabindex="-1"
+    aria-labelledby="ForgotPasswordModalLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="ForgotPasswordModalLabel">
+                    Parolyňyzy ýatdan çykardyňyzmy?
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <i class="bi bi-chat-dots-fill display-5 text-primary mb-3"></i>
+
+                <p class="text-muted">
+                    {% translate "Eger parolyňyzy ýatdan çykaran bolsaňyz, bize SMS iberiň. Goldaw toparymyz ony täzeden dikeltmäge kömek eder." %}
+                </p>
+
+                <div class="alert alert-light border">
+                    <strong>{% translate "Hyzmat belgisi" %}</strong><br>
+                    +993 61 23 45 67
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <a href="sms:+99361234567?body=Salam.%20Parolymy%20ýatdan%20çykardym.%20Täzeden%20dikeltmäge%20kömek%20edip%20bilersiňizmi%3F"
+                class="btn btn-primary w-100">
+
+                    <i class="bi bi-chat-text me-2"></i>
+                    {% translate "SMS iber" %}
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- LoginModal -->
+<div class="modal fade" id="LoginModal" tabindex="-1" aria-labelledby="LoginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="LoginModalLabel">{% translate "Sistema girmek" %}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{% url 'users:login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <div class="modal-body">
+            <input type="text" placeholder="{% translate 'Doly ady' %}" maxlength="100" class="form-control mb-3" name="fullname" aria-label="Fullname">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">+993</span>
+                <input type="text" class="form-control" name="phone_number" placeholder="{% translate 'Telefon belgisi' %}" aria-label="Phone number" aria-describedby="basic-addon1">
+            </div>
+            <input type="password" class="form-control" name="password" placeholder="{% translate 'Parol' %}" aria-label="Password">
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <div class="d-flex justify-content-between align-items-center mt-3">
+
+                <div class="form-check">
+                    <input class="form-check-input"
+                        name="remember_me"
+                        type="checkbox"
+                        value="on"
+                        id="checkDefault">
+
+                    <label class="form-check-label" for="checkDefault">
+                        {% translate "Meni ýatda sakla" %}
+                    </label>
+                </div>
+
+                <a href="#"
+                class="small text-decoration-none"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#ForgotPasswordModal">
+                    {% translate "Parolymy yatdan çykardym?" %}
+                </a>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary w-100 p-1 my-1">
+                <i class="bi bi-door-open"></i> {% translate "Içeri girmek" %}
+            </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-3">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand px-lg-3 d-flex align-items-center" href="/">
+            <img src="{% static 'logo/liqui-moly.svg' %}"
+                alt="Liqui Moly"
+                height="54">
+        </a>
+        <!-- Mobile Right Buttons -->
+        <div class="d-flex align-items-center d-lg-none">
+            <!-- Search -->
+            <button id="mobileSearchBtn" class="btn text-light border-0">
+                <i class="bi bi-search fs-5"></i>
+            </button>
+            <!-- Cart -->
+            <a href="{% url 'cart:cart' %}"
+               class="position-relative text-light text-decoration-none" style="margin-right: 0.3rem;">
+
+                <i class="bi bi-cart3 fs-5"></i>
+
+                <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                    {{ request.user|get_cart_item_count:request.device_id }}
+                </span>
+            </a>
+
+            {% if user.is_authenticated %}
+                <button type="button" data-bs-toggle="modal" data-bs-target="#LogoutModal" class="text-light btn p-1 fs-4" style="margin-left: 0.5rem;">
+                    <i class="bi bi-box-arrow-right"></i>
+                </button>
+            {% else %}
+                <button type="button" data-bs-toggle="modal" data-bs-target="#LoginModal" class="text-light btn p-1 fs-4" style="margin-left: 0.5rem;">
+                    <i class="bi bi-door-open"></i>
+                </button>
+            {% endif %}
+
+            <div class="dropdown mx-2">
+                    <button
+                        class="btn btn-link text-light fs-4 p-0"
+                        data-bs-toggle="dropdown">
+
+                        <i class="bi bi-globe"></i>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="tk">
+
+                                <button class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                    <span>
+                                        <img src="{% static 'lang_logo/tkm.png' %}"
+                                            alt="Türkmen"
+                                            height="14"
+                                            class="me-2">
+
+                                        Türkmen
+                                    </span>
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% if LANGUAGE_CODE == "tk" %}
+                                        <i class="bi bi-check-lg text-success"></i>
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </li>
+
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="ru">
+
+                                <button class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                    <span>
+                                        <img src="{% static 'lang_logo/rus.png' %}"
+                                            alt="Русский"
+                                            height="14"
+                                            class="me-2">
+
+                                        Русский
+                                    </span>
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% if LANGUAGE_CODE == "ru" %}
+                                        <i class="bi bi-check-lg text-success"></i>
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </li>
+
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="en">
+
+                                <button class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                    <span>
+                                        <img src="{% static 'lang_logo/eng.png' %}"
+                                            alt="English"
+                                            height="14"
+                                            class="me-2">
+
+                                        English
+                                    </span>
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% if LANGUAGE_CODE == "en" %}
+                                        <i class="bi bi-check-lg text-success"></i>
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
+            </div>
+
+
+            <button id="customBurgerBtn"
+                    class="btn border-0 shadow-none text-light p-0"
+                    type="button"
+                    aria-label="Toggle navigation">
+                <i id="burgerIcon" class="bi bi-list fs-2"></i>
+            </button>
+
+        </div>
+
+        <!-- Navbar -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <!-- Navigation -->
+            <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-3">
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
+                        {% translate "Baş sahypa" %}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/about-company/' %}active{% endif %}" href="{% url 'cart:about-company' %}">
+                        {% translate "Kompaniýa hakkynda" %}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/orders/' %}active{% endif %}" href="{% url 'cart:orders' %}">
+                        {% translate "Meniň hyzmatlarym" %}
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Desktop Right -->
+            <div class="d-none d-lg-flex align-items-center gap-3 justify-content-end" style="flex-grow: 0.5 !important;">
+
+                <!-- Search Form -->
+                <form action="{% url 'cart:search-item' %}" method="get" class="d-flex w-100" role="search">
+
+                    <div class="input-group">
+
+                        <input class="form-control border-0"
+                               type="search"
+                               name="query"
+                               placeholder="{% translate 'Harytlary gözle...' %}"
+                               value="{{ request.GET.query }}">
+
+                        <button class="btn btn-danger" type="submit" style="background-color: #bd3a3a;">
+                            <i class="bi bi-search"></i>
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <!-- Cart Icon -->
+                <a href="{% url 'cart:cart' %}"
+                   class="position-relative text-light text-decoration-none">
+
+                    <i class="bi bi-cart3 fs-4"></i>
+
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                        {{ request.user|get_cart_item_count:request.device_id }}
+                    </span>
+
+                </a>
+
+                {% if user.is_authenticated %}
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#LogoutModal" class="text-light btn fs-4 p-1">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </button>
+                {% else %}
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#LoginModal" class="text-light btn fs-4 p-1">
+                        <i class="bi bi-door-open"></i>
+                    </button>
+                {% endif %}
+
+                <div class="dropdown" style="margin-right: 0.5rem;">
+                    <button
+                        class="btn btn-link text-light fs-4 p-0"
+                        data-bs-toggle="dropdown">
+
+                        <i class="bi bi-globe"></i>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="tk">
+
+                                <button class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                    <span>
+                                        <img src="{% static 'lang_logo/tkm.png' %}"
+                                            alt="Türkmen"
+                                            height="14"
+                                            class="me-2">
+
+                                        Türkmen
+                                    </span>
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% if LANGUAGE_CODE == "tk" %}
+                                        <i class="bi bi-check-lg text-success"></i>
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </li>
+
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="ru">
+
+                                <button class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                    <span>
+                                        <img src="{% static 'lang_logo/rus.png' %}"
+                                            alt="Русский"
+                                            height="14"
+                                            class="me-2">
+
+                                        Русский
+                                    </span>
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% if LANGUAGE_CODE == "ru" %}
+                                        <i class="bi bi-check-lg text-success"></i>
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </li>
+
+                        <li>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="en">
+
+                                <button class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                    <span>
+                                        <img src="{% static 'lang_logo/eng.png' %}"
+                                            alt="English"
+                                            height="14"
+                                            class="me-2">
+
+                                        English
+                                    </span>
+                                    {% get_current_language as LANGUAGE_CODE %}
+                                    {% if LANGUAGE_CODE == "en" %}
+                                        <i class="bi bi-check-lg text-success"></i>
+                                    {% endif %}
+
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mobile Search -->
+    <div class="bg-dark pt-2 w-100 d-lg-none" id="mobileSearch" style="display:none;">
+
+        <form action="{% url 'cart:search-item' %}" class="w-100 px-2" role="search">
+
+            <div class="input-group">
+
+                <input id="mobileSearchInput"
+                       type="search"
+                       class="form-control"
+                       name="query"
+                       placeholder="{% translate 'Harytlary gözle...' %}"
+                       value="{{ request.GET.query }}">
+
+                <button class="btn btn-danger" type="submit" style="background-color: #bd3a3a;">
+                    <i class="bi bi-search"></i>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</nav>
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const $menu = $('#mainNavbar');
+        const $icon = $('#burgerIcon');
+        const $mobileSearch = $('#mobileSearch');
+
+        function initNavbar() {
+            if ($(window).width() >= 992) {
+                $menu.show().css('display', 'block');
+                $icon.removeClass('bi-x-lg').addClass('bi-list');
+            } else {
+                $menu.hide();
+                $icon.removeClass('bi-x-lg').addClass('bi-list');
+
+            }
+        }
+        initNavbar();
+
+        $('#mobileSearchBtn').on('click', function () {
+
+            if ($mobileSearch.is(':visible')) {
+
+                $mobileSearch.fadeOut(100);
+
+            } else {
+
+                $mobileSearch.fadeIn(100, function () {
+                    $('#mobileSearchInput').trigger('focus');
+                });
+
+            }
+
+        });
+
+        $('#customBurgerBtn').on('click', function (e) {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            if ($mobileSearch.is(':visible')) {
+                $mobileSearch.stop(true, true).slideUp(150);
+            }
+
+            if ($(window).width() >= 992) {
+                return;
+            }
+
+            if ($menu.is(':hidden')) {
+                $menu.stop(true, true).slideDown(200);
+                $icon.removeClass('bi-list').addClass('bi-x-lg');
+            } else {
+                $menu.stop(true, true).slideUp(200);
+                $icon.removeClass('bi-x-lg').addClass('bi-list');
+            }
+
+        });
+
+        $(window).on('resize', function () {
+
+            if ($(window).width() >= 992) {
+                $menu.stop(true, true).show().css('display', 'block');
+                $icon.removeClass('bi-x-lg').addClass('bi-list');
+            } else {
+                $menu.hide();
+                $icon.removeClass('bi-x-lg').addClass('bi-list');
+
+            }
+
+        });
+
+        {% if not has_place %}
+            const modal = new bootstrap.Modal(document.getElementById('placeModal'));
+            modal.show();
+        {% endif %}
+
+        $('.place-btn').on('click', function () {
+
+            fetch("{% url 'cart:set_place' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: new URLSearchParams({
+                    place_id: $(this).data('id')
+                })
+            }).then(() => location.reload());
+
+        });
+    })
+</script>
+{% endblock %}

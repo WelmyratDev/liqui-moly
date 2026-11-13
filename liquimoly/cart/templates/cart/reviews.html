@@ -1,0 +1,271 @@
+{% extends "cart/base.html" %}
+
+{% load static %}
+{% load template_tags %}
+
+
+{% block content %}
+
+<div class="mt-2">
+    <div class="modal fade" id="RatingModal" tabindex="-1" aria-labelledby="RatingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="RatingModalLabel">Otzyw goşmak</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'cart:add-review' %}" class="text-center" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="rating d-flex align-items-center justify-content-center mb-1" id="starRatingGroup">
+                            {% for i in "12345" %}
+                                <button type="button" class="btn btn-link btn-sm text-warning p-1 star-btn" data-value="{{ i }}">
+                                    <i class="h4 bi bi-star"></i>
+                                </button>
+                            {% endfor %}
+                            <input class="d-none" id="r_rating" type="number" name="r_rating" value="0" min="1" max="5">
+                        </div>
+                        <div class="small text-secondary">Baha 1-den 5 ýyldyza çenli bolmalydyr.</div>
+                        <div class="form-group mt-3">
+                            <textarea class="form-control rounded-0" required id="r_comment" name="r_comment" rows="5" maxlength="1000" placeholder="Teswir..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger fw-semibold w-100" style="background-color: #bd3a3a;">
+                            <i class="bi bi-caret-right-fill"></i>Ugratmak
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DidNotLogin" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title">Otzyw goşmak</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert mb-0 fw-semibold alert-warning" role="alert">
+                        Otzyw goşmak üçin, ilki bilen hasaba girmeli ýa-da hasap açmaly.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="loginFeedback" href="#" class="btn btn-danger w-100 fw-semibold rounded-1" style="background-color: #bd3a3a;">
+                        <i class="bi bi-caret-right-fill"></i>Ulgama girmek
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <!-- Categories -->
+        <div class="col-lg-3 d-none d-lg-block">
+            {% include "cart/categories.html" %}
+        </div>
+
+        <!-- Reviews -->
+        <div class="col-lg-9">
+
+            <h1 class="text-center mb-3 mt-2 fs-4 fw-semibold">
+                Hemme Otzywlar
+            </h1>
+
+            <div class="row p-md-3">
+                <div class="col py-2 border bg-white">
+
+                    <!-- Reviews Header -->
+                    <div class="row border-bottom align-items-center">
+
+                        <!-- Rating -->
+                        <div class="col text-center border-end">
+
+                            <div class="text-danger h1 mb-1">
+                                {% get_ratings 'avg' %}
+                            </div>
+
+                            <div class="d-flex justify-content-center align-items-center gap-1 mb-2">
+
+                                <i class="bi bi-star-fill text-warning fs-6"></i>
+                                <i class="bi bi-star-fill text-warning fs-6"></i>
+                                <i class="bi bi-star-fill text-warning fs-6"></i>
+                                <i class="bi bi-star-fill text-warning fs-6"></i>
+                                <i class="bi bi-star-fill text-warning fs-6"></i>
+
+                                <span class="text-secondary fw-semibold small ms-1">
+                                    ({% get_ratings 'count' %})
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Leave Feedback -->
+                        <div class="col text-center">
+
+                            {% if user.is_authenticated %}
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#RatingModal">
+                                    Otzyw goşmak
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#DidNotLogin">
+                                    Otzyw goşmak
+                                </button>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    {% get_ratings 'all' as reviews %}
+
+                    <!-- Reviews List -->
+                    {% for review in reviews %}
+
+                        <div class="py-3 {% if not forloop.first %}border-top{% endif %}">
+
+                            <!-- Stars -->
+                            <div class="d-flex align-items-center gap-1">
+
+                                {% if review.star == 1 %}
+
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+
+                                {% elif review.star == 2 %}
+
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+
+                                {% elif review.star == 3 %}
+
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+
+                                {% elif review.star == 4 %}
+
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+
+                                {% else %}
+
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- User -->
+                            <div class="d-flex align-items-center mt-1 px-1">
+
+                                <i class="bi bi-person-circle text-secondary"></i>
+
+                                <span class="text-dark fw-semibold ms-2">
+                                    {{ review.user.name }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- Review -->
+                            <div class="mt-1 px-1">
+                                {{ review.description }}
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const ratingModal = document.getElementById("RatingModal");
+    const commentInput = document.getElementById("r_comment");
+    const loginFeedbackBtn = document.getElementById("loginFeedback");
+
+    if (loginFeedbackBtn) {
+        loginFeedbackBtn.addEventListener("click", function (e) {
+            e.preventDefault(); 
+
+            const currentModalEl = this.closest("#DidNotLogin");
+            if (currentModalEl) {
+                const currentModal = bootstrap.Modal.getInstance(currentModalEl);
+                if (currentModal) {
+                    currentModal.hide();
+                }
+            }
+
+            const loginModalEl = document.getElementById("LoginModal");
+            if (loginModalEl) {
+                const loginModal = bootstrap.Modal.getInstance(loginModalEl) || new bootstrap.Modal(loginModalEl);
+                loginModal.show();
+            }
+        });
+    }
+
+    if (ratingModal && commentInput) {
+        ratingModal.addEventListener("shown.bs.modal", () => {
+            commentInput.focus();
+        });
+    }
+
+    const starContainer = document.getElementById("starRatingGroup");
+    const ratingInput = document.getElementById("r_rating");
+
+    if (starContainer && ratingInput) {
+        const starBtns = starContainer.querySelectorAll(".star-btn");
+
+        const updateStars = (val) => {
+            starBtns.forEach((btn) => {
+                const starVal = parseInt(btn.dataset.value, 10);
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.classList.toggle("bi-star-fill", starVal <= val);
+                    icon.classList.toggle("bi-star", starVal > val);
+                }
+            });
+        };
+
+        starBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const clickedValue = parseInt(btn.dataset.value, 10);
+                const currentRating = parseInt(ratingInput.value, 10) || 0;
+                
+                // Сброс при повторном клике на ту же звезду
+                const newRating = (currentRating === clickedValue) ? 0 : clickedValue;
+                
+                ratingInput.value = newRating;
+                updateStars(newRating);
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

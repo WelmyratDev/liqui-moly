@@ -1,0 +1,105 @@
+{% load static i18n template_tags %}
+<footer class="bg-dark text-light pt-5 pb-4 mt-5 border-top border-secondary">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- Brand -->
+            <div class="col-12 col-md-4">
+                <a href="/" class="d-inline-flex align-items-center mb-3 text-decoration-none">
+                    <img src="{% static 'logo/liqui-moly.svg' %}"
+                         alt="Liqui Moly"
+                         height="48">
+                </a>
+
+                <p class="text-secondary small mb-0">
+                    {% translate "Liqui Moly. Awtoulaglar üçin ýokary hilli ýaglar we goşundylar bilen üpjün ediji. 1957-nji ýylda Germaniýada döredilen kompaniýa, häzirki wagtda dünýäniň 120-den gowrak ýurdunda öz önümlerini hödürleýär." %}
+                </p>
+            </div>
+
+            <!-- Navigation -->
+            <div class="col-6 col-md-2">
+                <h6 class="text-uppercase text-light mb-3">{% translate "Nawigasiýa" %}</h6>
+
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><a href="/" class="text-secondary text-decoration-none">{% translate "Baş sahypa" %}</a></li>
+                    <li class="mb-2"><a href="{% url 'cart:about-company' %}" class="text-secondary text-decoration-none">{% translate "Kompaniýa hakkynda" %}</a></li>
+                </ul>
+            </div>
+
+            <!-- Categories -->
+            {% footer_categories as categories %}
+            <div class="col-6 col-md-3">
+                <h6 class="text-uppercase text-light mb-3">{% translate "Kategoriýalar" %}</h6>
+
+                <ul class="list-unstyled small">
+                    {% for category in categories %}
+
+                        <li class="mb-2"><a href="{% url 'cart:category-detail' category.slug %}" class="text-secondary text-decoration-none">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% if LANGUAGE_CODE == "tk" %}
+                                {{ category.title_tm }}
+                            {% elif LANGUAGE_CODE == "ru" %}
+                                {{ category.title_ru }}
+                            {% else %}
+                                {{ category.title_tm }}
+                            {% endif %}
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-12 col-md-3">
+                <h6 class="text-uppercase text-light mb-3">{% translate "Aragatnaşyk" %}</h6>
+
+                <ul class="list-unstyled small text-secondary">
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        {% translate "Türkmenistan" %}
+                    </li>
+
+                    <li class="mb-2">
+                        <i class="bi bi-telephone me-2"></i>
+                        <a href="tel:+993201209" class="text-secondary text-decoration-none">
+                            201-209
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <i class="bi bi-envelope me-2"></i>
+                        <a href="mailto:liquimoly@sanly.tm" class="text-secondary text-decoration-none">
+                            liquimoly@sanly.tm
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Social -->
+                <div class="d-flex gap-3 mt-3">
+                    <a href="https://www.tiktok.com/@liquimoly_tm_official?_r=1&_t=ZS-986uUoeLiDY" class="text-secondary fs-5"><i class="bi bi-tiktok"></i></a>
+                    <a href="https://www.instagram.com/liquimoly_turkmenistan?igsh=MXBqbDZqY3VpNXRvaA==" class="text-secondary fs-5"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-secondary fs-5"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom bar -->
+        <hr class="border-secondary my-4">
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-secondary">
+
+            <div>
+                {% translate "© 2026 Liqui Moly. Hemme hukuklar goralan" %}
+            </div>
+
+            <div class="mt-2 mt-md-0">
+                {% translate "Ýokary hilli awtoulag hyzmaty üçin iň gowy önümler" %}
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>

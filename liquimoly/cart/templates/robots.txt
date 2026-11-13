@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /liquimoly-kerim/
+Disallow: /cart/
+Disallow: /orders/
+
+Sitemap: https://liqui-moly.com.tm/sitemap.xml

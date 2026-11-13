@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Django / runtime
+liquimoly/.env
+.env
+*.sqlite3
+liquimoly/data.json
+liquimoly/logs/
+liquimoly/media/
+liquimoly/staticfiles/
+
+# Local leftovers (not part of the app)
+liquimoly/settings.txt
+liquimoly/copy.txt
+liquimoly/save.txt
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

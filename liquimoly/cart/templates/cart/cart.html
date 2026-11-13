@@ -1,0 +1,585 @@
+{% extends 'cart/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% translate "Cart" %}{% endblock %}
+
+{% block content %}
+<style>
+
+.cart-list-wrapper {
+    background-color: #ffffff;
+}
+
+.last-border-0:last-child {
+    border-bottom: none !important;
+}
+
+.fs-7 {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.cart-img-box {
+    width: 80px;
+    height: 80px;
+}
+
+.title-link {
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.title-link:hover {
+    color: #2563eb !important;
+}
+
+.tm-plate {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.85rem;
+    line-height: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    user-select: none;
+}
+
+.plate-flag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    margin-right: 6px;
+    padding-right: 5px;
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.tm-plate-edara {
+    background: linear-gradient(180deg, #059669 0%, #047857 100%);
+    color: #ffffff;
+    border: 1.5px solid #065f46;
+    box-shadow: 0 2px 6px rgba(59, 175, 138, 0.25);
+}
+
+.tm-plate-edara .plate-flag {
+    border-right-color: rgba(255, 255, 255, 0.3);
+    color: #a7f3d0;
+}
+
+.tm-plate-hususy {
+    background: #ffffff;
+    color: #111827;
+    border: 1.5px solid #5a6272;
+}
+
+.tm-plate-hususy .plate-flag {
+    border-right-color: rgba(0, 0, 0, 0.2);
+    color: rgb(15, 87, 15);
+}
+
+.btn-remove-item {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-remove-item:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+@media (min-width: 768px) {
+    .cart-header {
+        display: grid !important;
+        grid-template-columns: 80px 2fr 1.5fr 1fr 50px;
+        align-items: center;
+    }
+
+    .cart-item > div {
+        display: grid !important;
+        grid-template-columns: 80px 2fr 1.5fr 1fr 50px;
+        align-items: center;
+    }
+
+    .cart-car-box {
+        border-left: 1px solid #f3f4f6;
+        padding-left: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cart-item > div {
+        display: flex !important;
+    }
+    
+    .cart-car-box {
+        width: 100%;
+        order: 3;
+        background-color: #f9fafb;
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .cart-price-box {
+        order: 4;
+    }
+
+    .cart-action-box {
+        order: 5;
+    }
+}
+</style>
+<div class="modal fade" id="loginRequiredModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-body text-center p-5">
+
+                <i class="bi bi-person-lock display-3 text-primary"></i>
+
+                <h4 class="fw-bold mt-3">
+                    {% translate "Ulgamyň içine girmek talap edilýar" %}
+                </h4>
+
+                <p class="text-muted mt-2">
+                    {% translate "Sargyty ýerine ýetirmek üçin, hasap açyň." %}
+                </p>
+
+                <div class="d-grid gap-2 mt-4">
+
+                    <a
+                        href="{% url 'users:login' %}"
+                        class="btn btn-primary">
+
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        {% translate "Girmek" %}
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="modal fade" id="checkoutModal" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-bold">
+
+                    <i class="bi bi-bag-check me-2"></i>
+
+                    {% translate "Hyzmaty ýerine ýetirmek" %}
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form action="{% url 'cart:checkout-order' %}" id="checkout-form" method="POST">
+                    {% csrf_token %}
+                    <div class="py-3 text-center">
+                       <div class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success"></i> {% translate "Hyzmaty saýlap kabul edeniňizden soň siz bilen habarlaşylar" %}
+                       </div>
+                       <div>
+                        <i class="bi bi-check-circle-fill text-success"></i> {% translate "Maşynyň brendine görä baha ýagdaýlary üýtgemegi mümkin" %}
+                       </div>
+                    </div>
+                </form>
+
+                <hr>
+
+                <!-- Summary -->
+
+                <div class="bg-light rounded p-3">
+
+                    <div class="d-flex justify-content-between mt-2">
+
+                        <strong>
+
+                            {% translate "Jemi" %}
+
+                        </strong>
+
+                        <strong>
+
+                            <span id="checkout-total">
+
+                                0.00
+
+                            </span>
+
+                            {% translate "TMT" %}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
+
+                    {% translate "yza" %}
+
+                </button>
+
+                <button
+                    type="submit"
+                    form="checkout-form"
+                    class="btn btn-primary">
+
+                    <i class="bi bi-check-circle me-2"></i>
+
+                    {% translate "Hyzmaty kabul et" %}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="mt-2">
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-4 order-2 order-sm-1 d-none d-lg-block">
+            {% include "cart/categories.html" %}
+        </div>
+        <div class="col-lg-8 col-md-12 col-sm-12 mt-5 order-1 order-sm-2">
+            {% if cart_items %}
+            <div class="cart-list-wrapper bg-white rounded-4 shadow-sm border p-3 p-md-4">
+                
+                <div class="d-none d-md-grid cart-header text-muted fw-bold pb-3 mb-3 border-bottom text-uppercase fs-7">
+                    <div style="width: 80px;">{% translate "Haryt" %}</div>
+                    <div class="ms-3">{% translate "Atlandyrylyşy" %}</div>
+                    <div>{% translate "Ulag maglumaty" %}</div>
+                    <div class="text-end">{% translate "Baha" %}</div>
+                    <div class="text-end" style="width: 50px;"></div>
+                </div>
+
+                {% for item in cart_items %}
+                <div class="cart-item py-3 border-bottom last-border-0">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        {% if item.product.image %}
+                        <div class="cart-img-box bg-light rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.title_tm }}" class="img-fluid" style="max-height: 65px; object-fit: contain;">
+                        </div>
+                        {% endif %}
+
+                        <div class="cart-title-box flex-grow-1">
+                            <a href="{% url 'cart:product_detail' item.product.slug %}" class="text-decoration-none text-dark fw-bold title-link d-block text-truncate">
+                                {{ item.product.title_tm }}
+                            </a>
+                            {% if item.brand and item.model %}
+                              <span class="text-muted small d-md-none">{{ item.brand }} {{ item.model }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="cart-car-box">
+                            <div class="d-flex flex-column align-items-start gap-1">
+                                
+                                {% if item.license_plate %}
+                                    {% if item.car_number_type == "edara" %}
+                                        <div class="tm-plate tm-plate-edara" title="Edara belgisi">
+                                            <span class="plate-flag">TM</span>
+                                            <span class="plate-number">{{ item.license_plate }}</span>
+                                        </div>
+                                        <h1>True</h1>
+                                    {% elif item.car_number_type == "hususy" %}
+                                        <h1>False</h1>
+                                        <div class="tm-plate tm-plate-hususy" title="Hususy belgi">
+                                            <span class="plate-flag">TM</span>
+                                            <span class="plate-number">{{ item.license_plate }}</span>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                              
+                                <div class="car-specs-text">
+                                    <div class="text-muted small mb-1">
+                                        {% if item.brand %}
+                                            <span class="fw-semibold text-dark">{{ item.brand }}</span>
+                                        {% endif %}
+
+                                        {% if item.model %}
+                                            • {{ item.model }}
+                                        {% endif %}
+
+                                        {% if item.year %}
+                                            • {{ item.year }} ý.
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="d-flex flex-wrap gap-2">
+
+                                        {% if item.car_number_type %}
+                                            <span class="badge rounded-pill text-bg-light border">
+                                                <i class="bi bi-card-text me-1"></i>
+                                                {{ item.car_number_type }}
+                                            </span>
+                                        {% endif %}
+
+                                        {% if item.engine %}
+                                            <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
+                                                <i class="bi bi-gear-fill me-1"></i>
+                                                {{ item.engine }}
+                                            </span>
+                                        {% endif %}
+
+
+                                        {% if item.casting_type %}
+                                            <span class="badge rounded-pill bg-warning-subtle text-dark border border-warning-subtle">
+                                                <i class="bi bi-box-seam me-1"></i>
+                                                {{ item.casting_type }}
+                                            </span>
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cart-price-box text-end">
+                            <div class="d-none pPrice">{{ item.product.price }}</div>
+                            <div class="fw-bold fs-5 text-dark">
+                                <span class="product-price">{{ item.total_price }}</span>
+                                <span class="fs-6 text-secondary fw-semibold ms-1">TMT</span>
+                            </div>
+                        </div>
+
+                        <div class="cart-action-box text-end">
+                            <button type="button" value="{{ item.id }}" class="btn-remove-item remove-from-cart" title="{% translate 'Öçür' %}">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="bg-white rounded-4 shadow-sm border p-5 text-center my-4">
+                <div class="empty-icon-box mx-auto mb-3 text-secondary bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="bi bi-cart2 display-5"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-2">{% translate "Siziň sebediňiz boş" %}</h4>
+                <p class="text-muted mb-4 max-w-sm mx-auto">{% translate "Siziň sebediňiz boş. Harydy goşmagyňyzy haýyş edýäris." %}</p>
+                <a href="/" class="btn btn-primary btn-lg rounded-pill px-5 fs-6 shadow-sm">
+                    <i class="bi bi-arrow-left me-2"></i>{% translate "Dowam etmek" %}
+                </a>
+            </div>
+            {% endif %}
+            <!-- Checkout sticky box -->
+            <div class="position-fixed {% if cart_items|length > 0 %}{% else %}d-none{% endif %} bottom-0 end-0 p-3" style="z-index: 1050; width: 320px;">
+                <div class="card shadow-lg border-0">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">{% translate "Umumy Sany" %}</span>
+                            <span class="cart-count-summary">{{ cart_items|length }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">{% translate "Jemi" %}</span>
+                            <strong>
+                                <span id="cart-total-price">0.00</span> {% translate "TMT" %}
+                            </strong>
+                        </div>
+
+                        
+                        {% if request.user.is_authenticated %}
+
+                            <button
+                                class="btn btn-primary w-100 mb-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#checkoutModal">
+
+                                <i class="bi bi-credit-card me-2"></i>
+                                {% translate "Hyzmaty sargyt etmek" %}
+
+                            </button>
+
+                        {% else %}
+
+                            <button
+                                class="btn btn-primary w-100 mb-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#loginRequiredModal">
+
+                                <i class="bi bi-credit-card me-2"></i>
+                                {% translate "Hyzmaty sargyt etmek" %}
+
+                            </button>
+
+                        {% endif %}
+
+                        <a href="/" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            {% translate "Söwda dowam etmek" %}
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block scripts %}
+    <script>
+    $('.increase').click(function () {
+        $self = $(this);
+        $self.attr("disabled", true);
+        $.ajax({
+            url: "{% url 'cart:increase-quantity' %}",
+            dataType: "json",
+            type: "POST",
+            data: { "id": $self.val(), "csrfmiddlewaretoken": "{{ csrf_token }}" },
+            success: function (result, status, xhr) {
+
+                $self.attr("disabled", false);
+                $('.cart-count').text(result['total_count']);
+                $self.prev().text(result['quantity']);
+                updateCart()
+            },
+            error: function (result, status, xhr) {
+                updateCart();
+            },
+        });
+    });
+
+    $('.decrease').click(function () {
+
+        const $self = $(this);
+        const quantity = parseInt($self.next().text(), 10);
+
+        if (quantity <= 1) {
+            $self.prop('disabled', true);
+            return;
+        }
+
+        $self.prop('disabled', true);
+
+        $.ajax({
+            url: "{% url 'cart:decrease-quantity' %}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                id: $self.val(),
+                csrfmiddlewaretoken: "{{ csrf_token }}"
+            },
+
+            success: function (result) {
+                $('.cart-count').text(result.total_count);
+                $self.next().text(result.quantity);
+
+                updateCart();
+            },
+
+            error: function (xhr) {
+                console.error(xhr.responseText);
+            },
+
+            complete: function () {
+                updateCart();
+            }
+        });
+    });
+
+
+    $('.remove-from-cart').click(function () {
+        let $self = $(this);
+        $.ajax({
+            url: "{% url 'cart:remove-from-cart' %}",
+            method: "POST",
+            data: {
+                'id': $self.val(),
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function (response) {
+                $self.closest('.cart-item').remove();
+                if ($('.cart-item').length === 0) {
+                    location.reload();
+                }
+                $('.cart-count').text(response['total_count'])
+                updateCart()
+            },
+            error: function () {
+                alert('Ошибка при отправке запроса.');
+            }
+        });
+    });
+
+    function updateCart() {
+        let psPrice = 0;
+        let cartCount = 0;
+
+        $('.cart-item').each(function () {
+            let price = parseFloat($(this).find('.pPrice').text());
+            let pQuantity = parseInt($(this).find('.pQuantity').text(), 10) || 1;
+
+            let pPrice = (price * pQuantity).toFixed(1);
+
+            $(this).find('.product-price')
+                .text(parseFloat(pPrice).toFixed(2));
+
+            psPrice += parseFloat(pPrice);
+            
+
+            $(this).find('.decrease')
+                .prop('disabled', pQuantity <= 1);
+        });
+
+        $('#cart-total-price').text(psPrice.toFixed(2));
+        $('.cart-count-summary').text($('#cart-count').text());
+    }
+
+    updateCart();
+
+    function checkoutProccess() {
+        $('.cart-count-checkout').text($('#cart-count').text());
+        $('#checkout-total').text($('#cart-total-price').text());
+    }
+    checkoutProccess();
+</script>
+{% endblock %}
+{% endblock %}
+

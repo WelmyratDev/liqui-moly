@@ -1,0 +1,372 @@
+{% extends 'cart/base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<style>
+:root {
+    --order-radius: 16px;
+    --order-card-bg: #ffffff;
+    --order-surface-muted: #f8fafc;
+}
+
+
+.order-card {
+    border-radius: var(--order-radius);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.order-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.08) !important;
+}
+
+
+.stat-card {
+    background-color: var(--order-surface-muted);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+
+.items-strip {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 2px 10px 2px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.items-strip::-webkit-scrollbar {
+    height: 5px;
+}
+
+.items-strip::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 10px;
+}
+
+
+.order-item-chip {
+    flex: 0 0 auto;
+    width: 230px;
+    background: var(--order-surface-muted);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 10px;
+    scroll-snap-align: start;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.order-item-chip:hover {
+    border-color: #cbd5e1;
+    background-color: #ffffff;
+}
+
+.item-thumb-box {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+
+.tm-plate-mini {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.tm-plate-mini .plate-flag {
+    font-size: 0.6rem;
+    font-weight: 900;
+    margin-right: 4px;
+    padding-right: 4px;
+}
+
+
+.tm-plate-edara {
+    background: linear-gradient(180deg, #059669 0%, #047857 100%);
+    color: #ffffff;
+    border: 1px solid #065f46;
+}
+
+.tm-plate-edara .plate-flag {
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    color: #a7f3d0;
+}
+
+
+.tm-plate-hususy {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #0f172a;
+}
+
+.tm-plate-hususy .plate-flag {
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    color: rgb(15, 87, 15);
+}
+
+
+@media (max-width: 575.98px) {
+    .order-item-chip {
+        width: 195px;
+        padding: 8px;
+    }
+    .item-thumb-box {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 400px) {
+    .tm-plate-mini {
+        width: 80px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .tm-plate-mini {
+        width: 100px !important;
+    }
+}
+</style>
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2 pb-2 border-bottom">
+        <div>
+            <h3 class="fw-bold mb-1 text-dark">{% translate "Meniň hyzmatlarym" %}</h3>
+            <p class="text-muted small mb-0">{% translate "Sargytlaryňyzyň meýilnamasy we statuslary" %}</p>
+        </div>
+        <span class="badge bg-white text-dark border shadow-sm rounded-pill px-3 py-2 fs-6 fw-semibold">
+            <i class="bi bi-box-seam text-primary me-1"></i>{% translate "Jemi" %}: {{ orders|length }}
+        </span>
+    </div>
+
+    {% if orders %}
+        <div class="d-flex flex-column gap-4">
+
+            {% for order in orders %}
+
+                <div class="card order-card bg-white shadow-sm border-0 border-start border-4 
+                    {% if order.status == 'success' %}border-success
+                    {% elif order.status == 'reject' %}border-danger
+                    {% elif order.status == 'pending' %}border-warning
+                    {% else %}border-primary{% endif %}">
+
+                    <div class="card-body p-3 p-md-4">
+
+                        <!-- 1. ШАПКА КАРТОЧКИ (Номер, Дата, Статус) -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 pb-3 border-bottom">
+                            
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5 class="fw-bold text-dark mb-0">
+                                        {% translate "Sargyt" %} #{{ order.id|default:forloop.counter }}
+                                    </h5>
+                                </div>
+                                <div class="text-muted small mt-1">
+                                    <i class="bi bi-calendar3 me-1"></i>{{ order.created_at|date:"d.m.Y H:i" }}
+                                </div>
+                            </div>
+
+                            <div>
+                                {% if order.status == "pending" %}
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-2 fw-medium">
+                                        <i class="bi bi-hourglass-split me-1"></i>{% translate "Barlanýar" %}
+                                    </span>
+                                {% elif order.status == "success" %}
+                                    <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle rounded-pill px-3 py-2 fw-medium">
+                                        <i class="bi bi-check-circle-fill me-1"></i>{% translate "Tassyklandy" %}
+                                    </span>
+                                {% elif order.status == "reject" %}
+                                    <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle rounded-pill px-3 py-2 fw-medium">
+                                        <i class="bi bi-x-circle-fill me-1"></i>{% translate "Ret edildi" %}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle rounded-pill px-3 py-2 fw-medium">
+                                        <i class="bi bi-arrow-repeat me-1"></i>{% translate "Işleniş prosesinde" %}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+                        
+                        <div class="row g-2 g-md-3 mb-3">
+                            <div class="col-6 col-md-3">
+                                <div class="stat-card h-100 d-flex flex-column justify-content-center">
+                                    <div class="text-muted small mb-1">
+                                        <i class="bi bi-boxes me-1"></i>{% translate "Harytlar" %}
+                                    </div>
+                                    <div class="fw-bold fs-5 text-dark">
+                                        {{ order.items.count }} <span class="fs-6 fw-normal text-muted">{% translate "sany" %}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-md-4">
+                                <div class="stat-card h-100 d-flex flex-column justify-content-center">
+                                    <div class="text-muted small mb-1">
+                                        <i class="bi bi-wallet2 me-1"></i>{% translate "Jemi bahasy" %}
+                                    </div>
+                                    <div class="fw-bold fs-5 text-primary">
+                                        {{ order.total_price }} <small class="fs-6 fw-semibold">TMT</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="px-2">
+                            <div class="text-muted text-uppercase fs-7 fw-bold mb-2 tracking-wide">
+                                {% translate "Harytlar sanawy" %}
+                            </div>
+
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 g-2">
+                                {% for item in order.items.all %}
+                                    <div class="col">
+                                        <div class="row p-2 border rounded-3 bg-light g-2">
+                                            
+                                            <div class="col-lg-auto col-md-auto col-sm-auto col-auto">
+                                                <div class="bg-white rounded border d-flex align-items-center justify-content-center p-2 flex-shrink-0" style="width: 80px; height: 100px;">
+                                                    <img src="{{ item.product.image.url }}" 
+                                                        alt="{{ item.product.title_tm }}" 
+                                                        class="img-fluid h-100 object-fit-contain" 
+                                                        loading="lazy">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-lg-8 col-md-8 col-sm-8 col-8">
+                                                <div class="fw-bold text-dark small mb-1" title="{{ item.product.title_tm|default:item.brand }}">
+                                                    {{ item.product.title_tm|default:item.brand }}
+                                                </div>
+
+                                                <div class="d-flex flex-column gap-1">
+
+                                                    {% if item.car_number or item.license_plate %}
+                                                        {% if "edara" in item.car_number_type|lower %}
+                                                            <div class="tm-plate-mini tm-plate-edara w-50">
+                                                                <span class="plate-flag">TM</span>
+                                                                <span class="">
+                                                                    {{ item.car_number|default:item.license_plate }}
+                                                                </span>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="tm-plate-mini tm-plate-hususy w-50">
+                                                                <span class="plate-flag">TM</span>
+                                                                <span class="">
+                                                                    {{ item.car_number|default:item.license_plate }}
+                                                                </span>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                    <div class="text-muted extra-small">
+                                                        {% if item.brand %}
+                                                            <span class="fw-semibold text-dark">{{ item.brand }}</span>
+                                                        {% endif %}
+
+                                                        {% if item.model %}
+                                                            • {{ item.model }}
+                                                        {% endif %}
+
+                                                        {% if item.year %}
+                                                            • {{ item.year }}
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="d-flex flex-wrap gap-1">
+
+                                                        {% if item.car_number_type %}
+                                                            <span class="badge rounded-pill text-bg-light border">
+                                                                <i class="bi bi-card-text me-1"></i>
+                                                                {{ item.car_number_type }}
+                                                            </span>
+                                                        {% endif %}
+
+                                                        {% if item.engine %}
+                                                            <span class="badge rounded-pill bg-primary-subtle text-primary border border-primary-subtle">
+                                                                <i class="bi bi-gear-fill me-1"></i>
+                                                                {{ item.engine }}
+                                                            </span>
+                                                        {% endif %}
+
+                                                        {% if item.litr %}
+                                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle">
+                                                                <i class="bi bi-droplet-fill me-1"></i>
+                                                                {{ item.litr }} L
+                                                            </span>
+                                                        {% endif %}
+
+                                                        {% if item.castin_type %}
+                                                            <span class="badge rounded-pill bg-warning-subtle text-dark border border-warning-subtle">
+                                                                <i class="bi bi-box-seam me-1"></i>
+                                                                {{ item.castin_type }}
+                                                            </span>
+                                                        {% endif %}
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <div class="col-12">
+                                        <div class="text-muted small py-2">
+                                            {% translate "Haryt ýok" %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+        <div class="bg-white rounded-4 shadow-sm border p-5 text-center my-4">
+            <div class="bg-light rounded-circle d-inline-flex p-4 text-muted mb-3">
+                <i class="bi bi-inbox display-4 text-secondary"></i>
+            </div>
+
+            <h4 class="fw-bold text-dark mb-2">
+                {% translate "Sizde heniz sargyt ýok" %}
+            </h4>
+
+            <p class="text-muted mb-4 max-w-sm mx-auto fs-6">
+                {% translate "Bu ýerde sargytlaryňyzyň taryhy görkeziler" %}
+            </p>
+
+            <a href="/" class="btn btn-primary btn-lg rounded-pill px-5 fs-6 shadow-sm">
+                <i class="bi bi-bag-plus me-2"></i>
+                {% translate "Hyzmatlary sargamak" %}
+            </a>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,219 @@
+{% load template_tags %}
+{% load i18n %}
+
+<div>
+    <!-- Categories -->
+    <div class="card border shadow-sm category-card">
+
+        <!-- Header -->
+        <div class="card-header text-white py-3 border-0"
+             style="background-color:#bd3a3a;">
+
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-grid-fill"></i>
+
+                <span class="fw-semibold">
+                    {% translate "Kategoriýalar" %}
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- Categories -->
+        <div class="list-group list-group-flush">
+
+            {% categories as categories %}
+
+            {% for category in categories %}
+
+                <div class="category-wrapper">
+
+                    <!-- Parent -->
+                    <div class="list-group-item
+                                px-2
+                                list-group-item-action
+                                d-flex
+                                justify-content-between
+                                align-items-center
+                                category-item">
+
+                        <a href="{% url 'cart:category-detail' category.slug %}"
+                           class="text-decoration-none text-reset flex-grow-1">
+                            {% if category.image %}
+                                <img class="img-fluid rounded-circle m-0 p-0" src="{{ category.image.url }}" width="55" height="55" alt="{{ category.title_tm }}">
+                            {% endif %}
+                            {% get_current_language as LANGUAGE_CODE %}
+
+                            {% if LANGUAGE_CODE == "ru" and category.title_ru %}
+                                {{ category.title_ru }}
+                            {% else %}
+                                {{ category.title_tm }}
+                            {% endif %}
+
+                        </a>
+
+
+                        {% if category.has_children %}
+
+                            <button
+                                type="button"
+                                class="btn btn-link p-0 ms-2 border-0 shadow-none category-toggle"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#category-{{ category.id }}"
+                                aria-expanded="false"
+                                aria-controls="category-{{ category.id }}">
+
+                                <i class="bi bi-chevron-down small category-arrow"></i>
+
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Children -->
+                    {% if category.has_children %}
+
+                        <div id="category-{{ category.id }}"
+                             class="collapse subcategory-list"
+                             data-bs-parent=".list-group">
+
+                            {% for child in category.children.all %}
+
+                                <a href="{% url 'cart:category-detail' child.slug %}"
+                                   class="list-group-item
+                                          list-group-item-action
+                                          subcategory-item">
+
+                                    {% get_current_language as LANGUAGE_CODE %}
+
+                                    {% if LANGUAGE_CODE == "tk" %}
+                                        {{ child.title_tm }}
+
+                                    {% elif LANGUAGE_CODE == "ru" %}
+                                        {{ child.title_ru }}
+
+                                    {% else %}
+                                        {{ child.title_tm }}
+                                    {% endif %}
+
+                                </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Google Maps -->
+    {% if place_id %}
+
+        {% get_place place_id as place %}
+
+        {% if place and place.google_maps_url %}
+
+            <div class="mt-4 shadow-sm rounded-4 overflow-hidden map-wrapper">
+
+                <div
+                    id="googleMapWrapper"
+                    class="map-container"
+                    data-src="{{ place.google_maps_url }}"
+                    data-place="{{ place.title_tm }}"
+                >
+
+                    <div class="map-placeholder
+                                d-flex
+                                flex-column
+                                align-items-center
+                                justify-content-center
+                                bg-light">
+
+                        <i class="bi bi-geo-alt-fill fs-1 text-danger"></i>
+
+                        <p class="mb-0 small text-muted fw-medium mt-2">
+                            Загрузка карты...
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const mapWrapper = document.getElementById("googleMapWrapper");
+
+    if (!mapWrapper) {
+        return;
+    }
+
+    const mapSrc = mapWrapper.dataset.src;
+    const placeName = mapWrapper.dataset.place || "Карта";
+
+    if (!mapSrc) {
+        return;
+    }
+
+    const loadMap = () => {
+
+        const iframe = document.createElement("iframe");
+
+        iframe.src = mapSrc;
+        iframe.title = `Карта: ${placeName}`;
+
+        iframe.loading = "lazy";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+        mapWrapper.replaceChildren(iframe);
+    };
+
+
+    if ("IntersectionObserver" in window) {
+
+        const observer = new IntersectionObserver(
+            (entries, observerInstance) => {
+
+                const entry = entries[0];
+
+                if (!entry.isIntersecting) {
+                    return;
+                }
+
+                loadMap();
+
+                observerInstance.disconnect();
+            },
+            {
+                rootMargin: "250px 0px"
+            }
+        );
+
+        observer.observe(mapWrapper);
+
+    } else {
+
+        loadMap();
+
+    }
+
+});
+</script>
