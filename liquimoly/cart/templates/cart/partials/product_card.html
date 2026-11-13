@@ -1,0 +1,37 @@
+{% load static i18n template_tags %}
+<article class="p-card">
+    {% if product.quantity > 0 %}
+        <span class="p-card-stock in">{% translate "Elýeterli" %}</span>
+    {% else %}
+        <span class="p-card-stock out">{% translate "Elýeterli däl" %}</span>
+    {% endif %}
+
+    <a class="p-card-img" href="{% url 'cart:product_detail' product.slug %}" aria-label="{% tr product 'title' %}">
+        {% if product.image %}
+            <picture>
+                <source type="image/webp" srcset="{% srcset product.image 240 480 %}"
+                        sizes="(min-width: 1200px) 260px, (min-width: 576px) 30vw, 48vw">
+                <img src="{{ product.image.url }}" alt="{% tr product 'title' %}" width="480" height="480"
+                     loading="{% if eager %}eager{% else %}lazy{% endif %}" decoding="async">
+            </picture>
+        {% else %}
+            <img src="{% static 'images/no-image.webp' %}" alt="{% tr product 'title' %}" width="480" height="480" loading="lazy" decoding="async">
+        {% endif %}
+    </a>
+
+    <div class="p-card-body">
+        <a class="p-card-title" href="{% url 'cart:product_detail' product.slug %}">{% tr product "title" %}</a>
+        {% if product.description %}
+            <div class="p-card-desc">{{ product.description|truncatewords:8 }}</div>
+        {% endif %}
+        <div class="p-card-price">{{ product.price }}<small>TMT</small></div>
+        <button type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#ServiceModal"
+                value="{{ product.id }}"
+                data-requires-parameters="{% if product.category.requires_parameters %}true{% else %}false{% endif %}"
+                class="btn btn-lm w-100 add-to-cart">
+            <i class="bi bi-bag-plus"></i>&nbsp;{% translate "Sebede goş" %}
+        </button>
+    </div>
+</article>

@@ -1,5 +1,5 @@
 {% extends 'cart/base.html' %}
-{% load i18n %}
+{% load i18n template_tags %}
 
 {% block content %}
 
@@ -244,7 +244,7 @@
                                             
                                             <div class="col-lg-auto col-md-auto col-sm-auto col-auto">
                                                 <div class="bg-white rounded border d-flex align-items-center justify-content-center p-2 flex-shrink-0" style="width: 80px; height: 100px;">
-                                                    <img src="{{ item.product.image.url }}" 
+                                                    <img src="{{ item.product.image|thumb:160 }}" width="80" height="100" 
                                                         alt="{{ item.product.title_tm }}" 
                                                         class="img-fluid h-100 object-fit-contain" 
                                                         loading="lazy">

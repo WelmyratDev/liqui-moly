@@ -1,0 +1,74 @@
+{% load i18n template_tags %}
+{% brand_options as brands %}
+<div class="modal fade" id="ServiceModal" tabindex="-1" aria-labelledby="ServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ServiceModalLabel">{% translate "Hyzmat goş" %}</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div id="brand-section">
+                    <label for="brand" class="form-label">{% translate "Brendi saýlaň" %}</label>
+                    <select id="brand" name="brand" class="form-select">
+                        <option value="" selected disabled>{% translate "-- Brendi saýlaň --" %}</option>
+                        {% for id, title in brands.brand %}<option value="{{ id }}">{{ title }}</option>{% endfor %}
+                    </select>
+                </div>
+
+                <div id="model-section" class="d-none mt-2">
+                    <label for="model" class="form-label">{% translate "Modeli saýlaň" %}</label>
+                    <select id="model" name="model" class="form-select">
+                        <option value="" selected disabled>{% translate "-- Modeli saýlaň --" %}</option>
+                    </select>
+                </div>
+
+                <div id="year-section" class="d-none mt-2">
+                    <label for="year" class="form-label">{% translate "Ýyly saýlaň" %}</label>
+                    <select id="year" name="year" class="form-select">
+                        <option value="" selected disabled>{% translate "-- Ýyly saýlaň --" %}</option>
+                        {% for id, title in brands.yyly %}<option value="{{ id }}">{{ title }}</option>{% endfor %}
+                    </select>
+                </div>
+
+                <div id="engine-section" class="d-none mt-2">
+                    <label for="engine" class="form-label">{% translate "Matory saýlaň" %}</label>
+                    <select id="engine" name="engine" class="form-select">
+                        <option value="" selected disabled>{% translate "-- Matory saýlaň --" %}</option>
+                        {% for id, title in brands.motor %}<option value="{{ id }}">{{ title }}</option>{% endfor %}
+                    </select>
+                </div>
+
+                <div id="casting-type-section" class="d-none mt-2">
+                    <label for="casting-type" class="form-label">{% translate "Guýma görnüşini saýlaň" %}</label>
+                    <select id="casting-type" name="casting-type" class="form-select">
+                        <option value="" selected disabled>{% translate "-- Guýma görnüşini saýlaň --" %}</option>
+                        {% for id, title in brands.guyma %}<option value="{{ id }}">{{ title }}</option>{% endfor %}
+                    </select>
+                </div>
+
+                <div id="number-section" class="d-none mt-2">
+                    <label for="numberType" class="form-label">{% translate "Maşyn nomer görnüşi saýlaň" %}</label>
+                    <select id="numberType" name="numberType" class="form-select">
+                        <option value="" selected disabled>{% translate "-- Maşyn nomer görnüşi --" %}</option>
+                        {% for id, title in brands.hususy %}<option value="{{ id }}" data-type="hususy">{{ title }}</option>{% endfor %}
+                        {% for id, title in brands.edara %}<option value="{{ id }}" data-type="edara">{{ title }}</option>{% endfor %}
+                    </select>
+                </div>
+
+                <div id="car-number-section" class="d-none mt-2">
+                    <label for="car_number" class="form-label">{% translate "Maşynyň nomeri" %}</label>
+                    <input type="text" id="car_number" name="car_number" class="form-control text-uppercase" placeholder="XX 0000 XX" maxlength="12" autocomplete="off">
+                    <div id="car_number_error" class="text-danger mt-1 small d-none"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-lm w-100 modal-cart">
+                    <i class="bi bi-bag-plus"></i>&nbsp;{% translate "Sebede goş" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

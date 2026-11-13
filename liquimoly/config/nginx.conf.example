@@ -1,0 +1,52 @@
+# Reference nginx server block for liqui-moly.com.tm.
+# Compare with the server's current config (/etc/nginx/sites-available/...)
+# and merge the "static/media caching" and "gzip" parts; keep your SSL lines.
+
+server {
+    listen 443 ssl http2;
+    server_name liqui-moly.com.tm www.liqui-moly.com.tm;
+
+    # ssl_certificate     /etc/letsencrypt/live/liqui-moly.com.tm/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/liqui-moly.com.tm/privkey.pem;
+
+    client_max_body_size 10m;
+
+    gzip on;
+    gzip_comp_level 5;
+    gzip_min_length 1024;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml application/xml text/xml application/manifest+json;
+
+    # Static files have a content hash in their name (app.3f2a1c.css) -> cache forever.
+    location /static/ {
+        alias /home/ubuntu/liqui_moly/liquimoly/staticfiles/;
+        access_log off;
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # Uploaded images + generated WebP thumbnails (media/thumbs/).
+    location /media/ {
+        alias /home/ubuntu/liqui_moly/liquimoly/media/;
+        access_log off;
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000";
+        add_header X-Content-Type-Options nosniff;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 60s;
+    }
+}
+
+server {
+    listen 80;
+    server_name liqui-moly.com.tm www.liqui-moly.com.tm;
+    return 301 https://$host$request_uri;
+}

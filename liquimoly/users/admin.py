@@ -8,6 +8,8 @@ from .models import User
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
 
+    list_select_related = ('place',)
+
     ordering = ['id']
 
     list_display = (
@@ -112,7 +114,8 @@ class UserAdmin(BaseUserAdmin):
         if not request.user.place:
             return qs.none()
 
-        return qs.filter(place=request.user.place)
+        # Managers see customers of their region, never superusers or other staff.
+        return qs.filter(place=request.user.place, is_superuser=False, is_staff=False)
     
     def get_readonly_fields(self, request, obj=None):
         readonly = list(self.readonly_fields)
@@ -123,6 +126,7 @@ class UserAdmin(BaseUserAdmin):
                 'is_staff',
                 'groups',
                 'user_permissions',
+                'is_manager',
             ])
             readonly.append('place')
 
@@ -140,7 +144,7 @@ class UserAdmin(BaseUserAdmin):
         super().save_model(request, obj, form, change)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "place" and not request.user.is_superuser:
+        if db_field.name == "place" and not request.user.is_superuser and request.user.place_id:
             kwargs["queryset"] = request.user.place.__class__.objects.filter(
                 pk=request.user.place.pk
             )

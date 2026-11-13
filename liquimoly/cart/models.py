@@ -1,3 +1,5 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.conf import settings
 from django.db import models
 from django.db.models.aggregates import Avg
 from django.utils.translation import gettext_lazy as _
@@ -50,22 +52,7 @@ class Banner(models.Model):
 
 
     def save(self, *args, **kwargs):
-        old_place_id = None
-
-        if self.pk:
-            old_place_id = (
-                Banner.objects
-                .filter(pk=self.pk)
-                .values_list("place_id", flat=True)
-                .first()
-            )
-
         super().save(*args, **kwargs)
-
-        # cache.delete(f"banners_place_{self.place_id}")
-
-        # if old_place_id and old_place_id != self.place_id:
-        #     cache.delete(f"banners_place_{old_place_id}")
 
         if self.image:
             ext = self.image.name.split(".")[-1]
@@ -74,7 +61,7 @@ class Banner(models.Model):
 
             if self.image.name != new_name:
                 new_path = os.path.join(
-                    "media",
+                    settings.MEDIA_ROOT,
                     new_name
                 )
 
@@ -102,7 +89,7 @@ class Banner(models.Model):
 
             if self.image_sm.name != new_name:
                 new_path = os.path.join(
-                    "media",
+                    settings.MEDIA_ROOT,
                     new_name
                 )
 
@@ -122,10 +109,6 @@ class Banner(models.Model):
                     super().save(
                         update_fields=["image_sm"]
                     )
-
-    def delete(self, *args, **kwargs):
-        #cache.delete(f"banners_place_{self.place_id}")
-        super().delete(*args, **kwargs)
 
 
 class Brand(models.Model):
@@ -236,7 +219,7 @@ class Category(models.Model):
 
             if self.image.name != new_name:
                 new_path = os.path.join(
-                    "media",
+                    settings.MEDIA_ROOT,
                     new_name
                 )
 
@@ -667,12 +650,8 @@ class OrderItem(models.Model):
     class Meta:
         verbose_name = _("Order Item")
         verbose_name_plural = _("Order Items")
-        constraints = [
-            models.UniqueConstraint(
-                fields=["order", "product"],
-                name="unique_order_product"
-            )
-        ]
+        # NOTE: the old unique (order, product) constraint was removed: the same
+        # product can legitimately be ordered for two different cars.
 
     def __str__(self):
         return f"{self.product_title} x {self.quantity}"
@@ -687,7 +666,10 @@ class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    star = models.PositiveIntegerField(default=0)
+    star = models.PositiveIntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(5)],
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES)
 
