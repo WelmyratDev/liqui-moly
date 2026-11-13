@@ -1,0 +1,53 @@
+{% load static i18n template_tags %}
+{# Banners from the admin; built-in Liqui Moly banners when a region has none. #}
+<section class="hero splide" aria-label="Liqui Moly">
+    <div class="splide__track">
+        <ul class="splide__list">
+            {% if banners %}
+                {% for banner in banners %}
+                    <li class="splide__slide">
+                        <div class="hero-slide">
+                            <picture>
+                                {% if banner.image_sm %}
+                                    <source media="(max-width: 575.98px)" type="image/webp" srcset="{% srcset banner.image_sm 800 1200 %}" sizes="100vw">
+                                    <source media="(max-width: 575.98px)" srcset="{{ banner.image_sm.url }}">
+                                {% endif %}
+                                <source type="image/webp" srcset="{% srcset banner.image 800 1200 1920 %}" sizes="(min-width: 992px) 75vw, 100vw">
+                                <img class="hero-img" src="{{ banner.image.url }}" alt="{% tr banner 'title' %}"
+                                     width="1920" height="960"
+                                     {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+                            </picture>
+                            <div class="hero-content">
+                                <span class="hero-kicker">Liqui Moly · Made in Germany</span>
+                                {% if forloop.first %}<h1 class="hero-title">{% else %}<h2 class="hero-title">{% endif %}{% tr banner "title" %}{% if forloop.first %}</h1>{% else %}</h2>{% endif %}
+                                <p class="hero-text">{% tr banner "description" %}</p>
+                                <a href="{% url 'cart:product-list' %}" class="hero-cta">{% translate "Hemme harytlar" %} <i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            {% else %}
+                {% for item in default_banners %}
+                    <li class="splide__slide">
+                        <div class="hero-slide">
+                            <picture>
+                                <source media="(max-width: 575.98px)" type="image/webp" srcset="{% banner_static item.key "mobile.webp" %}">
+                                <source media="(max-width: 575.98px)" srcset="{% banner_static item.key "mobile.jpg" %}">
+                                <source type="image/webp" srcset="{% banner_static item.key "desktop.webp" %}">
+                                <img class="hero-img" src="{% banner_static item.key "desktop.jpg" %}" alt="Liqui Moly"
+                                     width="2000" height="1000"
+                                     {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+                            </picture>
+                            <div class="hero-content">
+                                <span class="hero-kicker">Liqui Moly · Made in Germany</span>
+                                {% if forloop.first %}<h1 class="hero-title">{% else %}<h2 class="hero-title">{% endif %}{% tr item "title" %}{% if forloop.first %}</h1>{% else %}</h2>{% endif %}
+                                <p class="hero-text">{% tr item "description" %}</p>
+                                <a href="{% url 'cart:product-list' %}" class="hero-cta">{% translate "Hemme harytlar" %} <i class="bi bi-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</section>

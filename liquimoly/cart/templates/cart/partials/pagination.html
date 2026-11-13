@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="d-flex justify-content-center mt-4 mt-lg-5" aria-label="pagination">
+    <ul class="pagination flex-wrap">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?{% if query %}query={{ query|urlencode }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">{% translate "Öňki" %}</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">{% translate "Öňki" %}</span></li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?{% if query %}query={{ query|urlencode }}&amp;{% endif %}page={{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?{% if query %}query={{ query|urlencode }}&amp;{% endif %}page={{ page_obj.next_page_number }}">{% translate "indiki" %}</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">{% translate "indiki" %}</span></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

@@ -3,15 +3,7 @@
 from django.db import migrations, models
 
 
-class Migration(migrations.Migration):
-
-    dependencies = [
-        ('cart', '0027_place_google_maps_url'),
-    ]
-
-    operations = [
-	    migrations.RunSQL(
-            sql="""
+FIX_SQLITE_AUTOINDEX_SQL = """
             DO $$
             BEGIN
                 -- Проверяем, остался ли проблемный индекс от SQLite
@@ -22,9 +14,23 @@ class Migration(migrations.Migration):
                 END IF;
             END
             $$;
-            """,
-            reverse_sql=migrations.RunSQL.noop,
-        ),
+            """
+
+
+def fix_sqlite_autoindex(apps, schema_editor):
+    # Leftover index from the SQLite -> PostgreSQL import; PostgreSQL only.
+    if schema_editor.connection.vendor == "postgresql":
+        schema_editor.execute(FIX_SQLITE_AUTOINDEX_SQL)
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('cart', '0027_place_google_maps_url'),
+    ]
+
+    operations = [
+        migrations.RunPython(fix_sqlite_autoindex, migrations.RunPython.noop),
         migrations.AlterField(
             model_name='product',
             name='slug',

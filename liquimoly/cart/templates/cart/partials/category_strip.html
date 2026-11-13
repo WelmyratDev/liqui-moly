@@ -1,0 +1,36 @@
+{% load i18n template_tags %}
+{% categories as categories %}
+{% if categories %}
+<nav aria-label="{% translate 'Kategoriýalar' %}">
+    <div class="cat-strip-head">
+        <h2 class="section-title fs-5">{% translate "Kategoriýalar" %}</h2>
+        <a class="link-more" href="{% url 'cart:product-list' %}">{% translate "Hemme harytlar" %} <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="cat-strip">
+        {% for category in categories %}
+            <a class="cat-chip" href="{% url 'cart:category-detail' category.slug %}">
+                <span class="cat-chip-img">
+                    {% if category.image %}
+                        <img src="{{ category.image|thumb:160 }}" alt="" width="70" height="70" loading="lazy" decoding="async">
+                    {% else %}
+                        <i class="bi bi-droplet-half"></i>
+                    {% endif %}
+                </span>
+                <span>{% tr category "title" %}</span>
+            </a>
+            {% for child in category.children.all %}
+                <a class="cat-chip" href="{% url 'cart:category-detail' child.slug %}">
+                    <span class="cat-chip-img">
+                        {% if child.image %}
+                            <img src="{{ child.image|thumb:160 }}" alt="" width="70" height="70" loading="lazy" decoding="async">
+                        {% else %}
+                            <i class="bi bi-droplet"></i>
+                        {% endif %}
+                    </span>
+                    <span>{% tr child "title" %}</span>
+                </a>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</nav>
+{% endif %}

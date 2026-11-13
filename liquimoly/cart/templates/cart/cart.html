@@ -1,6 +1,6 @@
 {% extends 'cart/base.html' %}
 
-{% load i18n %}
+{% load i18n template_tags %}
 
 {% block title %}{% translate "Cart" %}{% endblock %}
 
@@ -157,9 +157,7 @@
 
                 <div class="d-grid gap-2 mt-4">
 
-                    <a
-                        href="{% url 'users:login' %}"
-                        class="btn btn-primary">
+                    <a href="#" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#LoginModal" class="btn btn-primary">
 
                         <i class="bi bi-box-arrow-in-right me-2"></i>
                         {% translate "Girmek" %}
@@ -296,7 +294,7 @@
                     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                         {% if item.product.image %}
                         <div class="cart-img-box bg-light rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.title_tm }}" class="img-fluid" style="max-height: 65px; object-fit: contain;">
+                            <img src="{{ item.product.image|thumb:160 }}" alt="{{ item.product.title_tm }}" class="img-fluid" width="65" height="65" loading="lazy" style="max-height: 65px; object-fit: contain;">
                         </div>
                         {% endif %}
 
@@ -313,14 +311,12 @@
                             <div class="d-flex flex-column align-items-start gap-1">
                                 
                                 {% if item.license_plate %}
-                                    {% if item.car_number_type == "edara" %}
+                                    {% if item.car_number_type|lower|slice:":5" == "edara" %}
                                         <div class="tm-plate tm-plate-edara" title="Edara belgisi">
                                             <span class="plate-flag">TM</span>
                                             <span class="plate-number">{{ item.license_plate }}</span>
                                         </div>
-                                        <h1>True</h1>
-                                    {% elif item.car_number_type == "hususy" %}
-                                        <h1>False</h1>
+                                    {% elif item.car_number_type|lower|slice:":6" == "hususy" %}
                                         <div class="tm-plate tm-plate-hususy" title="Hususy belgi">
                                             <span class="plate-flag">TM</span>
                                             <span class="plate-number">{{ item.license_plate }}</span>
@@ -463,6 +459,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
 {% block scripts %}
     <script>
     $('.increase').click(function () {
@@ -581,5 +579,3 @@
     checkoutProccess();
 </script>
 {% endblock %}
-{% endblock %}
-

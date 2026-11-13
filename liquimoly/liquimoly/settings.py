@@ -1,204 +1,202 @@
-from django.utils.translation import gettext_lazy as _
-from django.contrib.messages import constants as messages
-from dotenv import load_dotenv
+"""
+Django settings for the Liqui Moly Turkmenistan shop.
+
+All environment-specific values come from environment variables (loaded from
+``.env`` next to ``manage.py``).  See ``.env.example`` for the full list.
+
+Production keeps working with the existing ``.env`` unchanged:
+    DJANGO_SECRET_KEY, DEBUG, ALLOWED_HOSTS, POSTGRES_* are read as before.
+"""
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.contrib.messages import constants as messages
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import gettext_lazy as _
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+def env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
-# Application definition
+def env_list(name, default=""):
+    return [item.strip() for item in os.getenv(name, default).split(",") if item.strip()]
 
+
+# --------------------------------------------------------------------------
+# Core
+# --------------------------------------------------------------------------
+DEBUG = env_bool("DEBUG", False)
+
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = "dev-only-insecure-key-do-not-use-in-production"
+    else:
+        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set when DEBUG is off.")
+
+# No more "*" fallback: an unset ALLOWED_HOSTS in production must fail loudly.
+ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "localhost,127.0.0.1" if DEBUG else "")
+
+CSRF_TRUSTED_ORIGINS = env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    ",".join(f"https://{host}" for host in ALLOWED_HOSTS if host and not host.startswith(".")),
+)
+
+
+# --------------------------------------------------------------------------
+# Applications
+# --------------------------------------------------------------------------
 INSTALLED_APPS = [
-    'jazzmin',
+    "jazzmin",
 
-    'django.contrib.admin',
-    'django.contrib.sitemaps',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.sitemaps",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
-    'users',
-    'cart',
-    'import_export',
+    "users",
+    "cart",
+    "import_export",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cart.middleware.DeviceIDMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "cart.middleware.DeviceIDMiddleware",
 ]
 
-ROOT_URLCONF = 'liquimoly.urls'
+ROOT_URLCONF = "liquimoly.urls"
 
 SITE_ID = 1
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.place_context',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.place_context",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'liquimoly.wsgi.application'
+WSGI_APPLICATION = "liquimoly.wsgi.application"
 
 
+# --------------------------------------------------------------------------
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+#   POSTGRES_DB set  -> PostgreSQL (production)
+#   otherwise        -> SQLite file (local development)
+# --------------------------------------------------------------------------
+if os.getenv("POSTGRES_DB"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASS"),
+            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+            "PORT": os.getenv("POSTGRES_PORT", "5432"),
+            # Reuse connections between requests instead of reconnecting each time.
+            "CONN_MAX_AGE": int(os.getenv("DB_CONN_MAX_AGE", "60")),
+            "CONN_HEALTH_CHECKS": True,
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.getenv("SQLITE_PATH", str(BASE_DIR / "db.sqlite3")),
+        }
+    }
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-# }
 
-# # settings.py
-DATABASES = {
-     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-         "NAME": os.getenv('POSTGRES_DB'),
-         "USER": os.getenv('POSTGRES_USER'),
-         "PASSWORD": os.getenv('POSTGRES_PASS'),
-         "HOST": os.getenv('POSTGRES_HOST'),
-         "PORT": os.getenv('POSTGRES_PORT'),
-     }
-}
+# --------------------------------------------------------------------------
+# Cache
+#   The default LocMem cache is per-process: with 3 gunicorn workers every
+#   worker had its own copy, so "clear cache" in the admin only cleared one of
+#   them.  A file-based cache is shared by all workers on the server and needs
+#   no extra service.  Set CACHE_URL=redis://... to use Redis instead.
+# --------------------------------------------------------------------------
+if os.getenv("CACHE_URL", "").startswith("redis"):
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv("CACHE_URL"),
+            "KEY_PREFIX": "liquimoly",
+            "TIMEOUT": 60 * 60,
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": os.getenv("CACHE_DIR", str(BASE_DIR / "cache")),
+            "TIMEOUT": 60 * 60,
+            "OPTIONS": {"MAX_ENTRIES": 5000},
+        }
+    }
 
 
+# --------------------------------------------------------------------------
+# Admin (jazzmin)
+# --------------------------------------------------------------------------
 JAZZMIN_SETTINGS = {
-    # title of the window (Will default to current_admin_site.site_title if absent or None)
-    "site_title": "Library Admin",
-
-    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_title": "Liqui Moly Admin",
     "site_header": "Liqui Moly",
-
-    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_brand": "Liqui Moly",
-
-    # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": 'logo/liqui-moly.svg',
-
-    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": None,
-
-    # Logo to use for login form in dark themes (defaults to login_logo)
-    "login_logo_dark": None,
-
-    # CSS classes that are applied to the logo above
+    "site_logo": "logo/liqui-moly.svg",
     "site_logo_classes": "img-circle",
-
-    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
-    "site_icon": None,
-
-    # Welcome text on the login screen
     "welcome_sign": "Welcome to the Liqui Moly Admin Panel",
-
-    # Copyright on the footer
-    "copyright": "Acme Library Ltd",
-
-    # List of model admins to search from the search bar, search bar omitted if excluded
-    # If you want to use a single search field you dont need to use a list, you can use a simple string 
-    "search_model": ["auth.User", "auth.Group"],
-
-    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
-    "user_avatar": None,
-
-    ############
-    # Top Menu #
-    ############
-
-    # Links to put along the top menu
+    "copyright": "Liqui Moly Turkmenistan",
+    "search_model": ["users.User", "cart.Product"],
     "topmenu_links": [
-
-        # Url that gets reversed (Permissions can be added)
-        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
-
-        # external url that opens in a new window (Permissions can be added)
-        {"name": "Support", "url": "", "new_window": True},
-
-        # model admin to link to (Permissions checked against model)
-        {"model": "auth.User"},
-
-        # App with dropdown menu to all its models pages (Permissions checked against models)
-        {"app": "books"},
+        {"name": "Home", "url": "admin:index", "permissions": ["users.view_user"]},
+        {"name": "Site", "url": "/", "new_window": True},
+        {"model": "users.User"},
+        {"app": "cart"},
     ],
-
-    #############
-    # User Menu #
-    #############
-
-    # Additional links to include in the user menu on the top right ("app" url type is not allowed)
     "usermenu_links": [
-        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
-        {"model": "auth.user"}
+        {"model": "users.User"},
     ],
-
-    #############
-    # Side Menu #
-    #############
-
-    # Whether to display the side menu
     "show_sidebar": True,
-
-    # Whether to aut expand the menu
     "navigation_expanded": True,
-
-    # Hide these apps when generating side menu e.g (auth)
     "hide_apps": [],
-
-    # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
-
-    # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["auth", "books", "books.author", "books.book"],
-
-    # Custom links to append to app groups, keyed on app name
-    "custom_links": {
-        "books": [{
-            "name": "Make Messages", 
-            "url": "make_messages", 
-            "icon": "fas fa-comments",
-            "permissions": ["books.view_book"]
-        }]
-    },
-
-    # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2
-    # for the full list of 5.13.0 free icon classes
+    "order_with_respect_to": [
+        "cart.Order",
+        "cart.OrderItem",
+        "cart.Product",
+        "cart.Category",
+        "cart.Banner",
+        "cart.Place",
+        "users",
+    ],
     "icons": {
         "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
         "users.User": "fas fa-user-circle",
 
@@ -212,118 +210,132 @@ JAZZMIN_SETTINGS = {
         "cart.Banner": "fas fa-images",
         "cart.Place": "fas fa-map-marker-alt",
         "cart.Rating": "fas fa-star",
-
-
     },
-    # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
-
-    #################
-    # Related Modal #
-    #################
-    # Use modals instead of popups
     "related_modal_active": False,
-
-    #############
-    # UI Tweaks #
-    #############
-    # Relative paths to custom CSS/JS scripts (must be present in static files)
-    "custom_css": 'css/jazzmin.css',
+    "custom_css": "css/jazzmin.css",
     "custom_js": None,
-    # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)
     "use_google_fonts_cdn": True,
-    # Whether to show the UI customizer on the sidebar
     "show_ui_builder": False,
-
-    ###############
-    # Change view #
-    ###############
-    # Render out the change view as a single form, or in tabs, current options are
-    # - single
-    # - horizontal_tabs (default)
-    # - vertical_tabs
-    # - collapsible
-    # - carousel
     "changeform_format": "horizontal_tabs",
-    # override change forms on a per modeladmin basis
-    "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
-    # Add a language dropdown into the admin
+    "changeform_format_overrides": {"users.user": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": True,
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
+# --------------------------------------------------------------------------
+# Auth
+# --------------------------------------------------------------------------
+AUTH_USER_MODEL = "users.User"
 
 AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 6},
     },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
 ]
 
-AUTH_USER_MODEL = 'users.User'
+# Login brute-force protection (see users/views.py)
+LOGIN_RATE_LIMIT_ATTEMPTS = int(os.getenv("LOGIN_RATE_LIMIT_ATTEMPTS", "10"))
+LOGIN_RATE_LIMIT_WINDOW = int(os.getenv("LOGIN_RATE_LIMIT_WINDOW", str(15 * 60)))
 
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_BROWSER_XSS_FILTER = True
+
+# --------------------------------------------------------------------------
+# Security (HTTPS-only settings are enabled whenever DEBUG is off)
+# --------------------------------------------------------------------------
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
+X_FRAME_OPTIONS = "DENY"
+SESSION_COOKIE_HTTPONLY = True
 
-# SECURE_SSL_REDIRECT = False
-# SECURE_HSTS_SECONDS = 0
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-# SECURE_HSTS_PRELOAD = False
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SECURE = False
-# SECURE_BROWSER_XSS_FILTER = False
-# SECURE_CONTENT_TYPE_NOSNIFF = False
+if not DEBUG:
+    SECURE_SSL_REDIRECT = env_bool("SECURE_SSL_REDIRECT", True)
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 
+# --------------------------------------------------------------------------
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
-LANGUAGE_CODE = 'tk'
-
-TIME_ZONE = 'Asia/Ashgabat'
-
+# --------------------------------------------------------------------------
+LANGUAGE_CODE = "tk"
+TIME_ZONE = "Asia/Ashgabat"
 USE_I18N = True
-
 USE_TZ = True
 
-
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 LANGUAGES = [
-    ('ru', _('Русский')),
-    ('en', _('English')),
-    ('tk', _('Türkmençe')),  
+    ("ru", _("Русский")),
+    ("en", _("English")),
+    ("tk", _("Türkmençe")),
 ]
 
-# messages
 MESSAGE_TAGS = {
-    messages.INFO: 'info',
-    messages.WARNING: 'warning',
-    messages.ERROR: 'danger',
-    messages.SUCCESS: 'success'
+    messages.INFO: "info",
+    messages.WARNING: "warning",
+    messages.ERROR: "danger",
+    messages.SUCCESS: "success",
 }
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+# --------------------------------------------------------------------------
+# Static & media
+#   Static files get a content hash in their name (app.3f2a1c.css) so nginx
+#   can cache them "forever"; a deploy changes the hash and busts the cache.
+#   Requires `python manage.py collectstatic` on every deploy (as before).
+# --------------------------------------------------------------------------
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if DEBUG
+            else "liquimoly.storage.ForgivingManifestStaticFilesStorage"
+        ),
+    },
+}
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Uploaded product photos are re-encoded into small WebP thumbnails on demand
+# (cart/images.py).  Generated files live under MEDIA_ROOT/THUMBNAIL_DIR.
+THUMBNAIL_DIR = "thumbs"
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# --------------------------------------------------------------------------
+# Logging: everything goes to stderr, which supervisor writes to logs/gunicorn.log
+# --------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "[{asctime}] {levelname} {name}: {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "root": {"handlers": ["console"], "level": "WARNING"},
+    "loggers": {
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False},
+        "cart": {"handlers": ["console"], "level": os.getenv("APP_LOG_LEVEL", "INFO"), "propagate": False},
+        "users": {"handlers": ["console"], "level": os.getenv("APP_LOG_LEVEL", "INFO"), "propagate": False},
+    },
+}
